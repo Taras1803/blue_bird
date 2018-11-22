@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Taras
- * Date: 28.08.2018
- * Time: 17:16
- */
 
 namespace frontend\widgets;
 

@@ -5,7 +5,7 @@
 use frontend\widgets\Breadcrumbs;
 use frontend\widgets\WriteToUs;
 
-$this->title = Yii::t('main', 'payment_delivery') . ' / ' . Yii::$app->params['site_name'];
+$this->title = Yii::t('main', 'payment_delivery');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('main', 'payment_delivery'), 'url' => false];
 ?>
 
@@ -27,13 +27,11 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('main', 'payment_delivery'),
             <div class="work_img">
                 <div class="work_img__items">
                     <div class="img__item">
-                        <a href="#">
-                            <img src="<?= Yii::$app->glide->createSignedUrl([
-                                'glide/index',
-                                'path' => 'images/' . $payment_delivery_page_img,
-                                'w' => 547
-                            ], true) ?>" class="about-us__image" alt="" >
-                        </a>
+                        <img src="<?= Yii::$app->glide->createSignedUrl([
+                            'glide/index',
+                            'path' => 'images/' . $payment_delivery_page_img,
+                            'w' => 547
+                        ], true) ?>" class="about-us__image" alt="">
                     </div>
                 </div>
             </div>

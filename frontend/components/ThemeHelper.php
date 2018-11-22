@@ -2,10 +2,11 @@
 
 namespace frontend\components;
 
-use common\models\Notifications;
-use common\models\Options;
 use Yii;
 use common\models\CurrentTime;
+use common\models\Comment;
+use common\models\Notifications;
+use common\models\Options;
 
 class ThemeHelper
 {
@@ -62,13 +63,52 @@ class ThemeHelper
 
     static function sendCommentForm($post)
     {
-
         $json = [];
         $json['error'] = 0;
         $json['text'] = Yii::t('main', 'form_comment_success');
         $json['action'] = 'clear_and_show_text';
-        Notifications::addMessage(0, 1, 'comment', [$post['id'], $post['user_name']]);
+
+        $coment = new Comment();
+        $coment->lang_id = $post['lang_id'];
+        $coment->item_type = $post['item_type'];
+        $coment->item_id = $post['item_id'];
+        $coment->comment = $post['comment'];
+        $coment->created_at = time();
+        $coment->status = 0;
+        $coment->user_id = 0;
+        $coment->user_name = $post['user_name'];
+        if($coment->save()){
+            Notifications::addMessage(0, 1, 'comment', [$coment->id, $post['user_name']]);
+        } else {
+            $json['error'] = 1;
+            $json['text'] = Yii::t('main', 'error_form_send');
+        }
+
         return $json;
+    }
+
+    static function getCurrency()
+    {
+        if($symbol = Yii::$app->session->get('shop_currency', false))
+            return $symbol;
+        else {
+            $option = Options::getBySlug('currency_symbol');
+            Yii::$app->session->set('shop_currency', $option);
+            return $option;
+        }
+
+    }
+
+    static function priceCalculation($price, $action)
+    {
+        if(!Yii::$app->user->isGuest)
+            $action += Yii::$app->user->identity->discount;
+
+        if($action){
+            $price = $price - ($price / 100 * $action);
+        }
+
+        return ceil($price);
     }
 
 }

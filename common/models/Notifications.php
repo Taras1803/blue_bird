@@ -64,9 +64,11 @@ class Notifications extends \yii\db\ActiveRecord
     private static function getMessage($slug)
     {
         $messages = [
-            'registration_user' => 'Регистрация нового пользователя: <a href="/manager/user/view?id=%s" target="_blank">%s</a>',
-            'comment' => 'Новый комментарий ожидает модерации: <a href="/manager/comment/view?id=%s" target="_blank">коментарий от пользователя <span style="font-weight: bold; color: #177315">%s</span></a>',
+            'registration_user' => 'Регистрация нового пользователя: <a href="/manager/user/view?id=%s">%s</a>',
+            'comment' => 'Новый комментарий ожидает модерации: <a href="/manager/comment/view?id=%s">коментарий от пользователя <span style="font-weight: bold; color: #177315">%s</span></a>',
             'write_us' => 'Форма Напиши Нам была отправлена на почту Администратора',
+            'new_order' => 'Новый заказ: <a href="/manager/orders/view?id=%s">№%s</a> со статусом <b>«%s»</b>',
+            'change_order_status' => 'Менеджер %s изменил статус заказа <a href="/manager/orders/view?id=%s">№%s</a> на <b>«%s»</b>',
         ];
 
         return $messages[$slug];

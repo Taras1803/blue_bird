@@ -35,7 +35,9 @@ class HtmlHelper
     {
         $description = $product->getProductsDescriptions()->one();
         ?>
-        <div class="items-line__item">
+        <?php if($product && $description): ?>
+            <?php $product_count = CatalogHelper::getProductCount($product->id, $product->type) ?>
+            <div class="items-line__item">
             <div class="product">
                 <div class="product__block">
                     <?php if ($product->images): ?>
@@ -51,38 +53,33 @@ class HtmlHelper
                         <a href="<?= Url::to(['/product']) ?>/<?= $product->slug ?>"
                            class="product__link"><?= $description->title ?></a>
                         <div class="product__bottom">
-                            <div class="dropdown-main dropdown-main--mass">
+                            <div class="dropdown-main dropdown-main--mass js__dropdownContainer">
                                 <label for="field-mass1" class="dropdown-main__header">
-                                    <input disabled type="text" class="field-mass1" id="field-mass1"
-                                           placeholder="200 <?= Yii::t('main', 'gr') ?>" name="">
+                                    <input disabled type="text" class="field-mass1 js__productCount"
+                                           placeholder="<?= $product_count[1] ?>" data-value="1">
                                     <i></i>
                                 </label>
                                 <ul class="dropdown-main__body dropdown-main__body--mass1">
-                                    <li>
-                                        <span>200 <?= Yii::t('main', 'gr') ?></span>
-                                    </li>
-                                    <li>
-                                        <span>300 <?= Yii::t('main', 'gr') ?></span>
-                                    </li>
-                                    <li>
-                                        <span>400 <?= Yii::t('main', 'gr') ?></span>
-                                    </li>
-                                    <li>
-                                        <span>500 <?= Yii::t('main', 'gr') ?></span>
-                                    </li>
-                                    <li>
-                                        <span>1 <?= Yii::t('main', 'kg') ?></span>
-                                    </li>
+                                    <?php foreach($product_count as $key => $value): ?>
+                                        <li>
+                                            <span data-value="<?= $key ?>" class="js__changeProductCount"><?= $value ?></span>
+                                        </li>
+                                    <?php endforeach; ?>
                                 </ul>
                             </div>
-                            <strong>25$</strong>
+                            <?php if($product->action): ?>
+                                <strong class="withSale"><?= ThemeHelper::priceCalculation($product->price, $product->action) ?><?= ThemeHelper::getCurrency() ?><s><?= ThemeHelper::priceCalculation($product->price, 0) ?><?= ThemeHelper::getCurrency() ?></s></strong>
+                            <?php else: ?>
+                                <strong><?= ThemeHelper::priceCalculation($product->price, 0) ?><?= ThemeHelper::getCurrency() ?></strong>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
-                <button class="btn-purple-lg"><span><?= Yii::t('main', 'in_shopping_cart') ?></span>
+                <button class="btn-purple-lg"  onclick="basket.add(event, this, <?= $product->id ?>)"><span><?= Yii::t('main', 'in_shopping_cart') ?></span>
                 </button>
             </div>
         </div>
+        <?php endif; ?>
         <?php
     }
 
@@ -107,7 +104,7 @@ class HtmlHelper
                         </div>
                     </div>
                 </a>
-                <button class="btn-purple-sm"><span>В КОРЗИНУ</span></button>
+                <button class="btn-purple-sm"><span><?= Yii::t('main', 'in_shopping_cart') ?></span></button>
             </div>
         </div>
         <?php

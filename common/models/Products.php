@@ -11,6 +11,7 @@ use Yii;
  * @property string $slug
  * @property string $images
  * @property string $price
+ * @property string $action_price
  * @property int $action
  * @property int $type
  * @property string $article
@@ -34,9 +35,9 @@ class Products extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['slug', 'images', 'created_at', 'updated_at'], 'required'],
-            [['price'], 'number'],
-            [['action', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['slug', 'price', 'images', 'created_at', 'updated_at'], 'required'],
+            [['price', 'action_price'], 'number'],
+            [['action', 'status', 'type', 'created_at', 'updated_at'], 'integer'],
             [['slug', 'images', 'article'], 'string', 'max' => 255],
             [['slug'], 'unique'],
         ];

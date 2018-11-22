@@ -3,6 +3,7 @@
 namespace frontend\widgets;
 
 use common\models\Categories;
+use frontend\components\BasketHelper;
 use yii;
 use yii\helpers\Url;
 use common\models\Lang;
@@ -22,7 +23,7 @@ class Menu extends \yii\bootstrap\Widget
             'menu' => $this->getMenu(),
             'categories_menu' => $this->getCategoriesMenu(),
             'theme_variables' => ThemeVariables::getValues(),
-            'product_count' => 0
+            'product_count' => BasketHelper::getBasketProductsCount()
         ]);
     }
 

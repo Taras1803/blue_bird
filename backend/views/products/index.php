@@ -25,6 +25,7 @@ $types = Products::getTypes();
                 'filterModel' => $searchModel,
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
+                    'id',
                     [
                         'attribute' => 'images',
                         'format' => 'raw',
@@ -49,6 +50,13 @@ $types = Products::getTypes();
                         'format' => 'raw',
                         'value' => function ($searchModel) {
                             return $searchModel->price;
+                        }
+                    ],
+                    [
+                        'attribute' => 'action',
+                        'format' => 'raw',
+                        'value' => function ($searchModel) {
+                            return $searchModel->action . '%';
                         }
                     ],
                     [
@@ -82,3 +90,12 @@ $types = Products::getTypes();
         </div>
     </div>
 </div>
+<style>
+    #w0 .table-bordered tr th:first-child {
+        display: none;
+    }
+
+    #w0 .table-bordered tr td:first-child {
+        display: none;
+    }
+</style>

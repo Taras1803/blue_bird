@@ -57,9 +57,7 @@ class ProductsToAttributes extends \yii\db\ActiveRecord
         if ($values)
             foreach ($values as $value) {
                 $product_attributes = ProductsAttributesValues::findAll(['product_attributes_id' => $value->attribute_id]);
-                $attribute_name = ProductsAttributes::findOne(['id' => $value->attribute_id]);
                 $data [] = [
-                    'attribute_name' => $attribute_name,
                     'data' => $value,
                     'values' => $product_attributes,
                 ];

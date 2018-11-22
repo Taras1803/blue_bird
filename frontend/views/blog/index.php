@@ -3,7 +3,7 @@
 use frontend\widgets\Breadcrumbs;
 use frontend\components\HtmlHelper;
 
-$this->title = Yii::t('main', 'blog') . ' / ' .Yii::$app->params['site_name'];
+$this->title = Yii::t('main', 'blog');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('main', 'blog'), 'url' => false];
 ?>
 
@@ -23,12 +23,12 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('main', 'blog'), 'url' => fa
                 <?php endforeach; ?>
             </div>
         </div>
-        <?= \yii\widgets\LinkPager::widget([
+        <?= \frontend\components\ThemeLinkPager::widget([
             'pagination' => $pagination,
             'prevPageCssClass' => 'prev',
             'nextPageCssClass' => 'next',
-            'prevPageLabel' => '<i class="icon-arrow1"></i>',
-            'nextPageLabel' => '<i class="icon-arrow1"></i>',
+            'prevPageLabel' => '<i class="bb-arrow-sm-left"></i>',
+            'nextPageLabel' => '<i class="bb-arrow-sm-right"></i>',
             'maxButtonCount' => 8
         ]); ?>
     </div>

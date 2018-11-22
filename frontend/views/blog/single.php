@@ -4,7 +4,7 @@ use frontend\widgets\Breadcrumbs;
 use frontend\widgets\CommentWidget;
 use \yii\helpers\Url;
 
-$this->title = Yii::t('main', 'single') . ' / ' .Yii::$app->params['site_name'];
+$this->title = Yii::t('main', 'single');
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('main', 'blog'), 'url' => Url::to(['/blog/']) . '/'];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('main', $description->title), 'url' => false];

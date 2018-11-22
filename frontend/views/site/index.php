@@ -34,15 +34,15 @@ $this->title = Yii::$app->params['site_name'];
         <div class="items-line__content">
             <div class="items-line__top">
                 <div class="items-line__top-inner">
-                    <span class="main-text main-text--sm">Категории</span>
-                    <h2 class="main-title">Новинки</h2>
+                    <span class="main-text main-text--sm">Кат<?= Yii::t('main', 'catalog') ?></span>
+                    <h2 class="main-title"><?= Yii::t('main', 'filter_new') ?></h2>
                 </div>
                 <div class="items-line__top-line"></div>
                 <div class="items-line__top-inner">
-                    <a href="#" class="main-link"><span><?= Yii::t('main', 'see_more') ?></span> все</a>
+                    <a href="<?= Url::to(['/catalog/all'])  ?>" class="main-link"><span><?= Yii::t('main', 'see_more') ?></span></a>
                 </div>
             </div>
-            <div class="items-line__items items-line__items--three">
+            <div class="items-line__items items-line__items--three items-line__items--lg">
                 <?php if ($new_products): ?>
                     <?php foreach ($new_products as $product): ?>
                         <?php HtmlHelper::product($product) ?>
@@ -57,15 +57,15 @@ $this->title = Yii::$app->params['site_name'];
         <div class="items-line__content">
             <div class="items-line__top">
                 <div class="items-line__top-inner">
-                    <span class="main-text main-text--sm">Категории</span>
-                    <h2 class="main-title">акции</h2>
+                    <span class="main-text main-text--sm"><?= Yii::t('main', 'catalog') ?></span>
+                    <h2 class="main-title"><?= Yii::t('main', 'action') ?></h2>
                 </div>
                 <div class="items-line__top-line"></div>
                 <div class="items-line__top-inner">
-                    <a href="#" class="main-link"><?= Yii::t('main', 'see_more') ?></a>
+                    <a href="<?= Url::to(['/catalog/all', 'order_by' => 'action'])  ?>" class="main-link"><?= Yii::t('main', 'see_more') ?></a>
                 </div>
             </div>
-            <div class="items-line__items items-line__items--four">
+            <div class="items-line__items items-line__items--four items-line__items--md">
                 <?php if ($action_products): ?>
                     <?php foreach ($action_products as $product): ?>
                         <?php HtmlHelper::product($product) ?>
@@ -81,7 +81,7 @@ $this->title = Yii::$app->params['site_name'];
             <div class="items-line__content">
                 <div class="items-line__top">
                     <div class="items-line__top-inner">
-                        <span class="main-text main-text--sm">Категории</span>
+                        <span class="main-text main-text--sm"><?= Yii::t('main', 'blog') ?></span>
                         <h2 class="main-title"><?= Yii::t('main', 'news') ?></h2>
                     </div>
                     <div class="items-line__top-line"></div>

@@ -6,6 +6,7 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 
 /**
@@ -16,7 +17,17 @@ use yii\web\IdentityInterface;
  * @property string $password_hash
  * @property string $password_reset_token
  * @property string $email
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $middle_name
+ * @property string $organization
+ * @property string $phone
+ * @property string $dob
+ * @property string $city
+ * @property string $address
  * @property integer $status
+ * @property integer $discount
+ * @property string $discount_card
  * @property integer $lang
  * @property integer $created_at
  * @property integer $updated_at
@@ -32,7 +43,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+            TimestampBehavior::class,
         ];
     }
 
@@ -67,13 +78,34 @@ class User extends ActiveRecord implements IdentityInterface
             'password_hash' => 'Password Hash',
             'password_reset_token' => 'Password Reset Token',
             'email' => 'Email',
+            'first_name' => 'Имя',
+            'last_name' => 'Фамилия',
+            'middle_name' => 'Отчество',
+            'phone' => 'Телефон',
+            'organization' => 'Организация',
+            'dob' => 'Дата рождения',
+            'city' => 'Город',
+            'discount' => 'Скидка',
+            'discount_card' => 'Дисконтная карта',
+            'address' => 'Адрес',
             'status' => 'Статус',
+            'lang' => 'Язык',
             'created_at' => 'Дата добавления',
             'updated_at' => 'Дата обновления',
         ];
     }
 
-
+    static function getStatus()
+    {
+        return [
+            0 => 'Отключен',
+            10 => 'Активный',
+        ];
+    }
+    public static function getLangs()
+    {
+        return  ArrayHelper::map(Lang::find()->orderBy(['id' => SORT_ASC])->all(), 'id', 'name');
+    }
     /**
      * @inheritdoc
      */

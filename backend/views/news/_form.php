@@ -59,7 +59,7 @@ use mihaildev\elfinder\ElFinder;
 
                     <?= $form->field($descriptions[$item->id], 'short_description')->textarea(['rows' => 4, 'id' => 'NewsDescriptions' . $item->id . '-short_description', 'name' => 'NewsDescriptions' . $item->id . '[short_description]']) ?>
 
-                    <?= $form->field($descriptions[$item->id], 'description')->widget(CKEditor::className(), [
+                    <?= $form->field($descriptions[$item->id], 'description')->widget(CKEditor::class, [
                         'options' => [
                             'id' => 'NewsDescriptions' . $item->id . '-description',
                             'name' => 'NewsDescriptions' . $item->id . '[description]'
@@ -71,7 +71,7 @@ use mihaildev\elfinder\ElFinder;
                             'customConfig' => '/manager/js/config.js',
                         ]
                     ]); ?>
-                    <?= $form->field($descriptions[$item->id], 'description_2')->widget(CKEditor::className(), [
+                    <?= $form->field($descriptions[$item->id], 'description_2')->widget(CKEditor::class, [
                         'options' => [
                             'id' => 'NewsDescriptions' . $item->id . '-description_2',
                             'name' => 'NewsDescriptions' . $item->id . '[description_2]'

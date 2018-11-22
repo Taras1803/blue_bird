@@ -5,7 +5,7 @@
 use frontend\widgets\Breadcrumbs;
 use frontend\widgets\WriteToUs;
 
-$this->title = Yii::t('main', 'cooperation') . ' / ' . Yii::$app->params['site_name'];
+$this->title = Yii::t('main', 'cooperation');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('main', 'cooperation'), 'url' => false];
 ?>
 
@@ -27,22 +27,18 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('main', 'cooperation'), 'url
             <div class="work_img">
                 <div class="work_img__items">
                     <div class="img__item">
-                        <a href="#">
-                            <img src="<?= Yii::$app->glide->createSignedUrl([
-                                'glide/index',
-                                'path' => 'images/' . $work_with_page_left_img,
-                                'w' => 547
-                            ], true) ?>" class="about-us__image" alt="" >
-                        </a>
+                        <img src="<?= Yii::$app->glide->createSignedUrl([
+                            'glide/index',
+                            'path' => 'images/' . $work_with_page_left_img,
+                            'w' => 547
+                        ], true) ?>" class="about-us__image" alt="">
                     </div>
                     <div class="img__item">
-                        <a href="#">
-                            <img src="<?= Yii::$app->glide->createSignedUrl([
-                                'glide/index',
-                                'path' => 'images/' . $work_with_page_right_img,
-                                'w' => 547
-                            ], true) ?>" class="about-us__image" alt="" >
-                        </a>
+                        <img src="<?= Yii::$app->glide->createSignedUrl([
+                            'glide/index',
+                            'path' => 'images/' . $work_with_page_right_img,
+                            'w' => 547
+                        ], true) ?>" class="about-us__image" alt="">
                     </div>
                 </div>
             </div>

@@ -2,12 +2,17 @@
 
 namespace frontend\controllers;
 
-use common\models\Comment;
-use frontend\components\ThemeHelper;
+use frontend\components\BasketHelper;
+use frontend\components\CatalogHelper;
+use frontend\components\CheckoutHelper;
+use frontend\components\FilterHelper;
+use frontend\components\PaymentHelper;
 use Yii;
 use yii\web\Controller;
 use common\models\CurrentTime;
 use yii\web\Response;
+use common\models\Comment;
+use frontend\components\ThemeHelper;
 
 
 /**
@@ -21,6 +26,16 @@ class ActionsController extends Controller
         $this->enableCsrfValidation = false;
 
         return parent::beforeAction($action);
+    }
+
+    public function actionLiqpayListener()
+    {
+        try {
+            if (!PaymentHelper::liqpayListener())
+                return $this->goHome();
+        } catch (\Exception $e) {
+            return $this->goHome();
+        }
     }
 
 
@@ -55,20 +70,50 @@ class ActionsController extends Controller
     {
         $post = Yii::$app->request->post();
         if ($post) {
-            $coment = new Comment();
-            $coment->lang_id = $post['lang_id'];
-            $coment->item_type = $post['item_type'];
-            $coment->item_id = $post['item_id'];
-            $coment->comment = $post['comment'];
-            $coment->created_at = time();
-            $coment->status = 0;
-            $coment->user_id = 0;
-            $coment->user_name = $post['user_name'];
-            $coment->save();
-            $post['id'] = $coment->id;
             $json = ThemeHelper::sendCommentForm($post);
             return $this->asJson($json);
         } else
             return $this->goHome();
     }
+
+    public function actionAddProductToBasket()
+    {
+        $post = Yii::$app->request->post();
+        if ($post) {
+            $json = BasketHelper::addProduct($post);
+            return $this->asJson($json);
+        } else
+            return $this->goHome();
+    }
+
+    public function actionRemoveProductFromBasket()
+    {
+        $post = Yii::$app->request->post();
+        if ($post) {
+            $json = BasketHelper::removeProduct($post['key']);
+            return $this->asJson($json);
+        } else
+            return $this->goHome();
+    }
+
+    public function actionChangeProductCount()
+    {
+        $post = Yii::$app->request->post();
+        if ($post) {
+            $json = BasketHelper::changeProductCount($post);
+            return $this->asJson($json);
+        } else
+            return $this->goHome();
+    }
+
+    public function actionSaveCheckoutData()
+    {
+        $post = Yii::$app->request->post();
+        if ($post) {
+            $json = CheckoutHelper::saveInformation($post);
+            return $this->asJson($json);
+        } else
+            return $this->goHome();
+    }
+
 }

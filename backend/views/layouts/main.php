@@ -16,7 +16,7 @@ $directoryAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed201
     <meta charset="<?= Yii::$app->charset ?>"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
-    <title><?= Yii::$app->params['site_name'] ?> | <?= Html::encode($this->title) ?></title>
+    <title><?= Html::encode($this->title) ?> / <?= Yii::$app->params['site_name'] ?></title>
     <?php $this->head() ?>
 </head>
 <body class="hold-transition <?= Yii::$app->params['admin_skin'] ?> sidebar-mini" data-userTime="<?= \common\models\CurrentTime::getUserTimeSession() ?>">

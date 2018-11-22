@@ -1,37 +1,45 @@
 <?php
 
-$this->title = Yii::t('main', 'forgot_password') . " | " . Yii::$app->params['site_name'];
+use \yii\helpers\Url;
 
+$this->title = Yii::t('main', 'forgot_password');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('main', 'account'), 'url' => Url::to(['/account']) . '/'];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('main', 'forgot_password'), 'url' => false];
 ?>
 
-<!--login-->
-<div class="container">
-    <h1 class="mainTitle mainTitle--center"><?= Yii::t('main', 'forgot_password') ?></h1>
-    <input type="hidden" value="<?= \yii\helpers\Url::to(['/account/login']) ?>" id="hiddenUrl">
-
-    <div class="login">
-        <div class="item">
-            <p class="js__notify"><?= Yii::t('main', 'forgot_text') ?></p>
-            <form id="forgot-form" class="forgot__form" action="/account/ajax/forgot-password" method="post" data-title="<?= Yii::t('main', 'forgot_pass_success') ?>">
-                <label for="forgot-email">
-                    <input type="email" id="forgot-email" class="form-fields required" name="email"
-                           placeholder="Email" aria-required="true">
-                </label>
-
-                <div class="errorText" style="display: none;"
-                     data-text="<?= Yii::t('main', 'incorrect_email') ?>"><?= Yii::t('main', 'incorrect_email') ?>
+<section class="cabinet header--padding">
+    <div class="container">
+        <div class="cabinet__content">
+            <div class="breadcrumbs">
+                <?= \frontend\widgets\Breadcrumbs::widget(['breadcrumbs' => $this->params['breadcrumbs']]) ?>
+            </div>
+            <div class="cabinet__header">
+                <h1 class="main-title"><?= Yii::t('main', 'forgot_password') ?></h1>
+            </div>
+            <div class="cabinet__body">
+                <div class="enter__header">
+                    <h2><?= vsprintf(Yii::t('main', 'already_account'),['<span><a class="withLine withLine--blue" href="' . Url::to(['/account/login']). '">', '</a></span>']) ?></h2>
                 </div>
-
-                <div class="login__form--send">
-                    <input type="submit" onclick="formSend.send(this, event, 'forgot')"
-                           value="<?= Yii::t('main', 'send') ?>"
-                           class="btn btn--white btn--white--border">
+                <div class="cabinet__tabs">
+                    <div class="cabinet__tab tab-personal-data is-active">
+                        <div class="cabinet__tab-items">
+                            <form action="<?= Url::to(['/account/ajax/forgot-password']) ?>">
+                                <div class="cabinet__tab-item">
+                                    <label for="field-email" class="cabinet__tab-label">E-mail*</label>
+                                    <div class="cabinet__tab-field">
+                                        <input type="email" class="field-input form-fields required" name="email" id="field-email">
+                                    </div>
+                                </div>
+                                <div class="errorText" data-text="<?= Yii::t('main', 'fill_in_required_fields') ?>"><?= Yii::t('main', 'fill_in_required_fields') ?></div>
+                                <div class="successText"></div>
+                                <div class="cabinet__tab-action cabinet__tab-action--end cabinet__tab-action--margin">
+                                    <button class="btn-purple-lg js__submitForm" onclick="formSend.send(this, event, 'login')"><span><?= Yii::t('main', 'send') ?></span></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-            </form>
-
+            </div>
         </div>
-
     </div>
-</div>
-
-<!--login-->
+</section>

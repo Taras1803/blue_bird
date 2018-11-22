@@ -10,6 +10,14 @@ var moduleAjax = {
         alert(response);
     }, "location_reload": function (response, params) {
         location.reload();
+    }, "add-product-to-basket": function (response, params) {
+        if (response.error == 0) {
+            $('.js__basketProductsCount').text('(' + response.basket_count + ')');
+        }
+    }, "reload_if": function (response, params) {
+        if (response.error == 0) {
+            location.reload();
+        }
     }
 };
 var formSend = (function () {
@@ -22,6 +30,8 @@ var formSend = (function () {
         $.each(form.find('.form-fields'), function () {
             if ($(this).hasClass('required')) {
                 var val = $(this).val(), type = $(this).attr('type');
+                console.log(type)
+                console.log(val)
                 if (val != "") {
                     if (type == "email") {
                         pattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/i;
@@ -47,18 +57,39 @@ var formSend = (function () {
         return action;
     };
     var postSend = function () {
-        if(actionType == 'write_us')
-            var request = $.ajax({url: ajaxAction, data: formData, type: 'post', dataType: 'json', contentType: false, processData: false});
+        if (actionType == 'write_us')
+            var request = $.ajax({
+                url: ajaxAction,
+                data: formData,
+                type: 'post',
+                dataType: 'json',
+                contentType: false,
+                processData: false
+            });
         else
             var request = $.ajax({url: ajaxAction, data: formData, type: 'post', dataType: 'json'});
 
         request.done(function (response) {
-            if(response['error'] == 0){
+            if (response['error'] == 0) {
                 form.find('.successText').html(response['text']);
-                if(response['action'] == 'clear_and_show_text'){
+                if (response['action'] == 'clear_and_show_text') {
                     form.find('.form-fields').val('');
                     form.find('.successText').show();
                     form.find('.js__submitForm').attr('disabled', 'true');
+                } else if (response['action'] == 'show_text_reload') {
+                    form.find('.successText').show();
+                    form.find('.js__submitForm').attr('disabled', 'true');
+                    setTimeout(function () {
+                        location.reload();
+                    }, 4000);
+                } else if (response['action'] == 'go_to') {
+                    location = response.location;
+                } else if (response['action'] == 'show_text') {
+                    form.find('.successText').show();
+                    form.find('.js__submitForm').attr('disabled', 'true');
+                } else if(response['action'] == 'send_payment_form'){
+                    $('#js__formContainer').html(response['form']);
+                    $('#js__formContainer').find('form').submit();
                 }
             } else {
                 form.find('.js__submitForm').removeAttr('disabled');
@@ -77,14 +108,13 @@ var formSend = (function () {
             form.find('.errorText').html(form.find('.errorText').attr('data-text'));
             var action = validation(form);
             if (action) {
-                if(actionType == 'write_us'){
+                if (actionType == 'write_us') {
                     formData = new FormData();
                     formData.append('fields', form.serialize());
-                    if(form.find('input[type="file"]').val())
+                    if (form.find('input[type="file"]').val())
                         formData.append('attach_file', form.find('input[type="file"]').prop('files')[0]);
                 } else
                     formData = getFormData(form);
-
                 ajaxAction = form.attr('action');
                 form.find('.js__submitForm').attr('disabled', 'true');
                 postSend();
@@ -93,7 +123,64 @@ var formSend = (function () {
             }
         }
     }
-})();
+})()
+
+var basket = {
+    "add": function (event, that, id) {
+        event.preventDefault();
+        var val = $(that).parents('.product').find('.js__productCount').attr('data-value');
+        moduleAjax.send({
+            'action': 1,
+            'id': id,
+            'count': val,
+        }, {
+            "url": '/actions/add-product-to-basket',
+            "type": 'post',
+            "dataType": 'json',
+            "callback": 'add-product-to-basket',
+            "callback_params": false,
+        });
+
+        modal.openManual('.modal__toCart--overlay');
+    }, "addSingle": function (event, that, id) {
+        event.preventDefault();
+        var val = $(that).parents('.card__form').find('.js__productCount').attr('data-value');
+        moduleAjax.send({
+            'action': 1,
+            'id': id,
+            'count': val,
+        }, {
+            "url": '/actions/add-product-to-basket',
+            "type": 'post',
+            "dataType": 'json',
+            "callback": 'add-product-to-basket',
+            "callback_params": false,
+        });
+
+        modal.openManual('.modal__toCart--overlay');
+    }, "remove": function (key) {
+        moduleAjax.send({
+            'key': key,
+        }, {
+            "url": '/actions/remove-product-from-basket',
+            "type": 'post',
+            "dataType": 'json',
+            "callback": 'reload_if',
+            "callback_params": false,
+        });
+    }, "change_count": function (key, count) {
+        moduleAjax.send({
+            'key': key,
+            'count': count,
+        }, {
+            "url": '/actions/change-product-count',
+            "type": 'post',
+            "dataType": 'json',
+            "callback": 'reload_if',
+            "callback_params": false,
+        });
+    }
+};
 
 function formValidator(container) {
     var action = true;
@@ -132,7 +219,10 @@ function getFormData(form) {
         if ($(this).attr('type') == 'radio') {
             if ($(this).prop("checked")) data[$(this).attr('name')] = $(this).val();
         } else {
-            data[$(this).attr('name')] = $(this).val();
+            if($(this).hasClass('has-value'))
+                data[$(this).attr('name')] = $(this).attr('data-value');
+            else
+                data[$(this).attr('name')] = $(this).val();
         }
     });
     return data;

@@ -42,7 +42,17 @@ class ManagerRoles
     private static function menu_admin(){
         return [
             ['label' => 'Главная', 'icon' => ' fa-dashboard', 'url' => Url::to('/manager/'), 'route' => 'site/index'],
-//            ['label' => 'Пользователи', 'icon' => ' fa-users', 'url' => Url::to('/manager/user/'), 'route' => 'user/index'],
+            ['label' => 'Пользователи', 'icon' => ' fa-users', 'url' => Url::to('/manager/user/'), 'route' => 'user/index'],
+            [
+                'label' => 'Продажи',
+                'icon' => 'money',
+                'url' => '#',
+                'items' => [
+                    ['label' => 'Заказы', 'icon' => 'circle-o', 'url' => Url::to('/manager/orders/'), 'route' => 'orders/index'],
+                    ['label' => 'Статусы заказов', 'icon' => 'circle-o', 'url' => Url::to('/manager/orders-status/'), 'route' => 'orders-status/index'],
+                    ['label' => 'Способы доставки', 'icon' => 'circle-o', 'url' => Url::to('/manager/delivery-methods/'), 'route' => 'delivery-methods/index'],
+                ],
+            ],
             [
                 'label' => 'Каталог',
                 'icon' => 'archive',
@@ -63,6 +73,7 @@ class ManagerRoles
                     ['label' => 'Контент страниц', 'icon' => 'circle-o', 'url' => Url::to('/manager/pages-content/'), 'route' => 'pages-content/index'],
                     ['label' => 'Опции темы', 'icon' => 'circle-o', 'url' => Url::to('/manager/pages-content/theme-variables'), 'route' => 'pages-content/theme-variables'],
                     ['label' => 'Главный Банер', 'icon' => 'circle-o', 'url' => Url::to('/manager/banner/'), 'route' => 'banner/index'],
+                    ['label' => 'Настройки SEO', 'icon' => 'circle-o', 'url' => Url::to('/manager/seo/'), 'route' => 'seo/index']
                 ],
             ],
             [

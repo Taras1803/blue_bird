@@ -5,7 +5,7 @@
 use frontend\widgets\Breadcrumbs;
 use yii\helpers\Url;
 
-$this->title = Yii::t('main', 'ordering') . ' / ' . Yii::$app->params['site_name'];
+$this->title = Yii::t('main', 'ordering');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('main', 'cart'), 'url' => Url::to(['/shopping-cart'])];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('main', 'ordering'), 'url' => false];
 ?>
@@ -21,195 +21,174 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('main', 'ordering'), 'url' =
             </div>
             <div class="order__body">
                 <div class="order__tabs">
-                    <div class="order__tab"><form action="">
+                    <div class="order__tab">
+                        <form action="/actions/save-checkout-data">
                             <div class="order__tab-items">
                                 <div class="order__tab-item">
                                     <h2><?= Yii::t('main', 'basic_information') ?></h2>
                                 </div>
                                 <div class="order__tab-item">
-                                    <div class="order__tab-label"><?= Yii::t('main', 'last_name') ?></div>
-                                    <div class="order__tab-field">Тарасенко</div>
-                                </div>
-                                <div class="order__tab-item">
-                                    <div class="order__tab-label"><?= Yii::t('main', 'first_name') ?></div>
-                                    <div class="order__tab-field">Марина</div>
-                                </div>
-                                <div class="order__tab-item">
-                                    <div class="order__tab-label"><?= Yii::t('main', 'patronymic') ?></div>
-                                    <div class="order__tab-field">Игоревна</div>
-                                </div>
-                                <div class="order__tab-item">
-                                    <label for="field-phone" class="order__tab-label"><?= Yii::t('main', 'phone') ?></label>
+                                    <label for="field-last_name"
+                                           class="order__tab-label"><?= Yii::t('main', 'last_name') ?>*</label>
                                     <div class="order__tab-field">
-                                        <input type="text" class="field-input" name="" id="field-phone" value="+38 050 00 00 000" placeholder="">
-                                    </div>
-                                </div>
-                                <div class="order__tab-item"><h2><?= Yii::t('main', 'your_address') ?></h2></div>
-                                <div class="order__tab-item">
-                                    <div class="order__tab-label"><?= Yii::t('main', 'country') ?></div>
-                                    <div class="order__tab-field">
-                                        <div class="country__select">
-                                            <div class="dropdown-main dropdown-main--country">
-                                                <label for="field-country" class="dropdown-main__header">
-                                                    <input disabled="" type="text" class="field-country" id="field-country" placeholder="Украина" name="">
-                                                    <i></i>
-                                                </label>
-                                                <ul class="dropdown-main__body dropdown-main__body--country">
-                                                    <li>
-                                                        <span><?= Yii::t('main', 'russia') ?></span>
-                                                    </li>
-                                                    <li>
-                                                        <span><?= Yii::t('main', 'kazakhstan') ?></span>
-                                                    </li>
-                                                    <li>
-                                                        <span><?= Yii::t('main', 'belarus') ?></span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
+                                        <input type="text" class="field-input form-fields required" name="last_name"
+                                               value="<?= $data['information']['last_name'] ?>"
+                                               id="field-last_name">
                                     </div>
                                 </div>
                                 <div class="order__tab-item">
-                                    <div class="order__tab-label"><?= Yii::t('main', 'city') ?></div>
+                                    <label for="field-first_name"
+                                           class="order__tab-label"><?= Yii::t('main', 'first_name') ?>*</label>
                                     <div class="order__tab-field">
-                                        <div class="city__select">
-                                            <div class="dropdown-main dropdown-main--city">
-                                                <label for="field-city" class="dropdown-main__header">
-                                                    <input disabled="" type="text" class="field-city" id="field-city" placeholder="<?= Yii::t('main', 'kharkiv') ?>" name="">
-                                                    <i></i>
-                                                </label>
-                                                <ul class="dropdown-main__body dropdown-main__body--city">
-                                                    <li>
-                                                        <span><?= Yii::t('main', 'kharkiv') ?></span>
-                                                    </li>
-                                                    <li>
-                                                        <span><?= Yii::t('main', 'moscow') ?></span>
-                                                    </li>
-                                                    <li>
-                                                        <span><?= Yii::t('main', 'kiev') ?></span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
+                                        <input type="text" class="field-input form-fields required"
+                                               name="first_name" value="<?= $data['information']['first_name'] ?>"
+                                               id="field-first_name">
                                     </div>
                                 </div>
                                 <div class="order__tab-item">
-                                    <label for="field-street" class="order__tab-label"><?= Yii::t('main', 'street_boulevard_avenue') ?></label>
+                                    <label for="field-middle_name"
+                                           class="order__tab-label"><?= Yii::t('main', 'middle_name') ?></label>
                                     <div class="order__tab-field">
-                                        <input type="text" class="field-input" name="" id="field-street" value="" placeholder="<?= Yii::t('main', 'street') ?>">
+                                        <input type="text" class="field-input form-fields" name="middle_name"
+                                               value="<?= $data['information']['middle_name'] ?>"
+                                               id="field-middle_name">
                                     </div>
                                 </div>
                                 <div class="order__tab-item">
-                                    <label for="field-house--number" class="order__tab-label"><?= Yii::t('main', 'house_number') ?></label>
+                                    <label for="field-email" class="order__tab-label">Email*</label>
                                     <div class="order__tab-field">
-                                        <input type="text" class="field-input" name="" id="field-house--number" value="" placeholder="45a">
+                                        <input type="text" class="field-input form-fields required" name="email"
+                                               id="field-email"
+                                               value="<?= $data['information']['email'] ?>">
                                     </div>
                                 </div>
                                 <div class="order__tab-item">
-                                    <label for="field-apartment--number" class="order__tab-label"><?= Yii::t('main', 'apartment_number') ?></label>
+                                    <label for="field-phone"
+                                           class="order__tab-label"><?= Yii::t('main', 'phone') ?></label>
                                     <div class="order__tab-field">
-                                        <input type="text" class="field-input" name="" id="field-apartment--number" value="" placeholder="145">
+                                        <input type="text" class="field-input form-fields" name="phone" id="field-phone"
+                                               value="<?= $data['information']['phone'] ?>">
                                     </div>
                                 </div>
-                                <div class="order__tab-item"><h2><?= Yii::t('main', 'payment') ?></h2></div>
-                                <div class="order__tab-item"><div class="order__tab-label"><?= Yii::t('main', 'payment_method') ?></div>
-                                    <div class="order__tab-field">
-                                        <div class="payment__select">
-                                            <div class="dropdown-main dropdown-main--payment">
-                                                <label for="field-payment" class="dropdown-main__header">
-                                                    <input disabled="" type="text" class="field-payment" id="field-payment" placeholder="<?= Yii::t('main', 'c_o_d') ?>" name="">
-                                                    <i></i>
-                                                </label>
-                                                <ul class="dropdown-main__body dropdown-main__body--payment">
-                                                    <li>
-                                                        <span><?= Yii::t('main', 'c_o_d') ?></span>
-                                                    </li>
-                                                    <li>
-                                                        <span><?= Yii::t('main', 'transfer_to_a_card') ?></span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="order__tab-item"><h2>Доставка</h2></div>
+
+                                <div class="order__tab-item"><h2><?= Yii::t('main', 'delivery') ?></h2></div>
                                 <div class="order__tab-item">
-                                    <div class="order__tab-label">Служба доставки</div>
+                                    <div class="order__tab-label"><?= Yii::t('main', 'delivery_service') ?>*</div>
                                     <div class="order__tab-field">
                                         <div class="delivery__select">
                                             <div class="dropdown-main dropdown-main--delivery">
                                                 <label for="field-delivery" class="dropdown-main__header">
-                                                    <input disabled="" type="text" class="field-delivery" id="field-delivery" placeholder="Новая почта" name="">
+                                                    <input disabled="true" type="text"
+                                                           class="field-delivery form-fields required has-value"
+                                                           id="field-delivery"
+                                                           value="<?= $data['delivery_methods'][$data['information']['delivery_method']]['title'] ?>"
+                                                           data-value="<?= $data['information']['delivery_method'] ?>"
+                                                           name="delivery_method">
                                                     <i></i>
                                                 </label>
                                                 <ul class="dropdown-main__body dropdown-main__body--delivery">
-                                                    <li>
-                                                        <span>Новая почта</span>
-                                                    </li>
-                                                    <li>
-                                                        <span>Укр почта</span>
-                                                    </li>
+                                                    <?php foreach ($data['delivery_methods'] as $key => $delivery_methods): ?>
+                                                        <li>
+                                                            <span data-value="<?= $key ?>"
+                                                                  data-text="<?= $delivery_methods['description'] ?>"
+                                                                  class="js__changeDeliveryMethod"><?= $delivery_methods['title'] ?></span>
+                                                        </li>
+                                                    <?php endforeach; ?>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="order__tab-item">
-                                    <div class="order__tab-label">Город</div>
+                                <div class="order__tab-item"
+                                     style="<?= ($data['information']['delivery_method'] != 'pickup') ? '' : 'display: none;' ?>">
+                                    <label for="field-city"
+                                           class="order__tab-label"><?= Yii::t('main', 'city') ?>*</label>
                                     <div class="order__tab-field">
-                                        <div class="city__select">
-                                            <div class="dropdown-main dropdown-main--city">
-                                                <label for="field-city" class="dropdown-main__header">
-                                                    <input disabled="" type="text" class="field-city" id="field-city" placeholder="Харьков" name="">
+                                        <input type="text"
+                                               class="field-input js__deliveryField <?= ($data['information']['delivery_method'] != 'pickup') ? 'form-fields required' : '' ?>"
+                                               name="city" id="field-city"
+                                               value="<?= $data['information']['city'] ?>">
+                                    </div>
+                                </div>
+
+                                <div class="order__tab-item"
+                                     style="<?= ($data['information']['delivery_method'] == 'nova_poshta_courier') ? '' : 'display: none;' ?>">
+                                    <label for="field-city"
+                                           class="order__tab-label"><?= Yii::t('main', 'address') ?>*</label>
+                                    <div class="order__tab-field">
+                                        <input type="text"
+                                               class="field-input js__deliveryField <?= ($data['information']['delivery_method'] == 'nova_poshta_courier') ? 'form-fields required' : '' ?>"
+                                               name="address"
+                                               id="field-city"
+                                               value="<?= $data['information']['address'] ?>">
+                                    </div>
+                                </div>
+
+                                <div class="order__tab-item"
+                                     style="<?= ($data['information']['delivery_method'] == 'nova_poshta') ? '' : 'display: none;' ?>">
+                                    <label for="field-np_detachment"
+                                           class="order__tab-label"><?= Yii::t('main', 'np_detachment') ?>*</label>
+                                    <div class="order__tab-field">
+                                        <input type="text"
+                                               class="field-input js__deliveryField <?= ($data['information']['delivery_method'] == 'nova_poshta') ? 'form-fields required' : '' ?>"
+                                               name="np_detachment"
+                                               id="field-np_detachment"
+                                               value="<?= $data['information']['np_detachment'] ?>">
+                                    </div>
+                                </div>
+
+                                <p class="js__deliveryText"><?= $data['delivery_methods'][$data['information']['delivery_method']]['description'] ?></p>
+
+                                <div class="order__tab-item"><h2><?= Yii::t('main', 'payment') ?></h2></div>
+                                <div class="order__tab-item">
+                                    <div class="order__tab-label"><?= Yii::t('main', 'payment_method') ?>*</div>
+                                    <div class="order__tab-field">
+                                        <div class="payment__select">
+                                            <div class="dropdown-main dropdown-main--payment">
+                                                <label for="field-payment" class="dropdown-main__header">
+                                                    <input disabled="true" type="text"
+                                                           class="field-payment form-fields required has-value"
+                                                           id="field-payment"
+                                                           value="<?= $data['payment_methods'][$data['information']['payment_method']]['name'] ?>"
+                                                           name="payment_method"
+                                                           data-value="<?= $data['information']['payment_method'] ?>">
                                                     <i></i>
                                                 </label>
-                                                <ul class="dropdown-main__body dropdown-main__body--city">
-                                                    <li>
-                                                        <span>Харьков</span>
-                                                    </li>
-                                                    <li>
-                                                        <span>Черкасы</span>
-                                                    </li>
-                                                    <li>
-                                                        <span>Киев</span>
-                                                    </li>
+                                                <ul class="dropdown-main__body dropdown-main__body--payment">
+                                                    <?php foreach ($data['payment_methods'] as $key => $payment_methods): ?>
+                                                        <li style="<?= ($data['information']['delivery_method'] == 'pickup' && $key == 'cod') ? 'display: none;' : '' ?>">
+                                                            <span data-value="<?= $key ?>"
+                                                                  class="js__changePaymentMethod"><?= $payment_methods['name'] ?></span>
+                                                        </li>
+                                                    <?php endforeach; ?>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="order__tab-item"><h2><?= Yii::t('main', 'comment') ?></h2></div>
                                 <div class="order__tab-item">
-                                    <div class="order__tab-label">Отделение</div>
-                                    <div class="order__tab-field">
-                                        <div class="post-office__select">
-                                            <div class="dropdown-main dropdown-main--post-office">
-                                                <label for="field-post-office" class="dropdown-main__header">
-                                                    <input disabled="" type="text" class="field-post-office" id="field-post-office" placeholder="1" name="">
-                                                    <i></i>
-                                                </label>
-                                                <ul class="dropdown-main__body dropdown-main__body--post-office">
-                                                    <li>
-                                                        <span>1</span>
-                                                    </li>
-                                                    <li>
-                                                        <span>2</span>
-                                                    </li>
-                                                    <li>
-                                                        <span>3</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <textarea name="comment" cols="30" rows="10"
+                                              class="field-textarea form-fields"><?= $data['information']['comment'] ?></textarea>
                                 </div>
-                                <div class="order__tab-item"><h2>Комментарий</h2></div>
-                                <div class="order__tab-item"><textarea name="" id="" cols="30" rows="10" placeholder="" class="field-textarea"></textarea></div>
+                                <div class="errorText"
+                                     data-text="<?= Yii::t('main', 'fill_in_required_fields') ?>"><?= Yii::t('main', 'fill_in_required_fields') ?></div>
+                                <div class="successText"></div>
                                 <div class="order__tab-item botton-item">
-                                    <button class="btn-purple-lg"><span>Оформить заказ</span></button>
+                                    <button type="submit" class="btn-purple-lg js__submitForm"
+                                            onclick="formSend.send(this, event, 'checkout')">
+                                        <span><?= Yii::t('main', 'checkout') ?></span>
+                                    </button>
                                 </div>
-                            </div></form>
+                            </div>
+                        </form>
+                        <div style="display: none;" id="js__formContainer">
+
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</section>

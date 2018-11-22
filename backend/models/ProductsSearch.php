@@ -42,7 +42,10 @@ class ProductsSearch extends Products
      */
     public function search($params)
     {
-        $query = Products::find();
+        if($params)
+            $query = Products::find();
+        else
+            $query = Products::find()->orderBy(['id' => SORT_DESC]);
 
         // add conditions that should always apply here
 

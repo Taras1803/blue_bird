@@ -2,32 +2,21 @@
 
 namespace frontend\modules\account\controllers;
 
-use common\models\PageContent;
 use yii;
+use yii\base\InvalidParamException;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
-use common\models\SubscribeUs;
-use frontend\components\ThemeHelper;
-use common\models\Countries;
-use common\models\UserAddress;
-use frontend\modules\account\models\UserInfo;
-use common\models\CheckoutSession;
-use common\models\Currency;
-use common\models\Lang;
-use common\models\Orders;
-use common\models\OrdersProducts;
-use common\models\OrdersStatus;
-use common\models\Promocode;
-use common\models\PromocodeToUser;
-use common\models\User;
 use yii\helpers\Url;
+use common\models\Seo;
+use frontend\modules\account\models\UserOrders;
+use backend\models\ResetPasswordForm;
 
 /**
  * Default controller for the `account` module
  */
 class DefaultController extends Controller
 {
-    public $layout = 'account';
 
     public function behaviors()
     {
@@ -63,8 +52,44 @@ class DefaultController extends Controller
     public function actionIndex()
     {
         $this->checkLogin();
-        return $this->render('index', [
+        $user = Yii::$app->user->identity;
+        $user_FIO = $user->last_name . " " . $user->first_name . " " . $user->middle_name;
+        $metaData = Seo::getDataBySlug();
+        $metaData['meta_title'] = Yii::t('main', 'account') . ' / ' . Yii::$app->params['site_name'];
+        Yii::$app->params['metaData'] = $metaData;
 
+        return $this->render('index', [
+            'user' => $user,
+            'user_fio' => $user_FIO,
+        ]);
+    }
+
+    /**
+     * @return string
+     */
+    public function actionOrders()
+    {
+        $this->checkLogin();
+        $metaData = Seo::getDataBySlug();
+        $metaData['meta_title'] = Yii::t('main', 'orders_history') . ' / ' . Yii::t('main', 'account') . ' / ' . Yii::$app->params['site_name'];
+        Yii::$app->params['metaData'] = $metaData;
+
+        return $this->render('orders', [
+            'orders_data' => UserOrders::getUserOrders()
+        ]);
+    }
+
+    public function actionEdit()
+    {
+        $this->checkLogin();
+        $user = Yii::$app->user->identity;
+
+        $metaData = Seo::getDataBySlug();
+        $metaData['meta_title'] = Yii::t('main', 'edit') . ' / ' . Yii::t('main', 'account') . ' / ' . Yii::$app->params['site_name'];
+        Yii::$app->params['metaData'] = $metaData;
+
+        return $this->render('edit', [
+            'user' => $user,
         ]);
     }
 
@@ -76,44 +101,43 @@ class DefaultController extends Controller
     public function actionLogin()
     {
         if (!Yii::$app->user->isGuest)
-            return $this->redirect('/account/');
+            return $this->redirect(Url::to(['/account']) . '/');
 
+        $metaData = Seo::getDataBySlug('/account/login');
+        Yii::$app->params['metaData'] = $metaData;
         return $this->render('login');
+    }
+
+
+    /**
+     * Displays registration page.
+     *
+     * @return mixed
+     */
+    public function actionRegistration()
+    {
+        if (!Yii::$app->user->isGuest)
+            return $this->redirect(Url::to(['/account']) . '/');
+
+        $metaData = Seo::getDataBySlug('/account/registration');
+        Yii::$app->params['metaData'] = $metaData;
+        return $this->render('registration');
     }
 
     public function actionForgot()
     {
         if (!Yii::$app->user->isGuest)
-            return $this->redirect('/account/');
+            return $this->redirect(Url::to(['/account']) . '/');
 
-        $this->layout = '@frontend/views/layouts/main';
+        $metaData = Seo::getDataBySlug('/account/forgot');
+        Yii::$app->params['metaData'] = $metaData;
         return $this->render('forgot');
-    }
-
-
-    public function actionResetPassword($token)
-    {
-        try {
-            $model = new ResetPasswordForm($token);
-        } catch (InvalidParamException $e) {
-            throw new BadRequestHttpException($e->getMessage());
-        }
-
-        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->session->setFlash('success', 'Пароль успешно обновлен.');
-
-            return $this->redirect(['/account/login']);
-        }
-
-        return $this->render('resetPassword', [
-            'model' => $model,
-        ]);
     }
 
     private function checkLogin()
     {
         if (Yii::$app->user->isGuest)
-            return $this->redirect(['/account/login']);
+            return $this->redirect(Url::to(['/account/login']));
     }
 
 }

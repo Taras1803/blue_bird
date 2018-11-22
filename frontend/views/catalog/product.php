@@ -5,9 +5,10 @@ use frontend\widgets\Breadcrumbs;
 use frontend\widgets\CommentWidget;
 use \yii\helpers\Url;
 
-$this->title = Yii::t('main', 'product') . ' / ' . Yii::$app->params['site_name'];
+$this->title = Yii::t('main', 'product');
 
-$this->params['breadcrumbs'][] = ['label' => Yii::t('main', $product['title']), 'url' => false];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('main', 'catalog'), 'url' => Url::to(['/catalog/' . $product['category_slug']])];
+$this->params['breadcrumbs'][] = ['label' => $product['title'], 'url' => false];
 
 ?>
 
@@ -22,40 +23,41 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('main', $product['title']), 
                         <img src="<?= Yii::$app->glide->createSignedUrl([
                             'glide/index',
                             'path' => 'products/' . $product['images'],
-                            'w' => 241
+                            'w' => 570
                         ], true) ?>" alt="<?= $product['title'] ?>">
                     </div>
                     <div class="card__description">
                         <div class="card__header">
                             <h1 class="card__name"><?= $product['title'] ?></h1>
-                            <div class="card__price"><?= $product['price'] ?>$/<span>50гр</span></div>
+                            <?php if($product['action']): ?>
+                                <div class="card__price"><?= $product['price'] ?><?= $product['currency'] ?> <s><?= $product['price'] ?><?= $product['currency'] ?></s>/<span><?= $product['per_count'] ?></span></div>
+                            <?php else: ?>
+                                <div class="card__price"><?= $product['price'] ?><?= $product['currency'] ?>/<span>50гр</span></div>
+                            <?php endif; ?>
                         </div>
-                        <form class="card__form">
-                            <?php if ($product['weight']): ?>
-                                <div class="card__string card__string--center">
-                                    <strong><?= Yii::t('main', 'weight') ?></strong>
-                                    <div class="card__select">
-                                        <div class="dropdown-main dropdown-main--mass">
-                                            <label for="field-mass1" class="dropdown-main__header">
-                                                <input disabled type="text" class="field-mass1" id="field-mass1"
-                                                       placeholder="200 гр" name="">
-                                                <i></i>
-                                            </label>
-                                            <ul class="dropdown-main__body dropdown-main__body--mass1">
-                                                <?php foreach ($product['weight'] as $item): ?>
-                                                    <li>
-                                                        <span><?= $item['value'] . " " . $item[$product['lang']] ?></span>
-                                                    </li>
-                                                <?php endforeach; ?>
-                                            </ul>
-
-                                        </div>
+                        <div class="card__form">
+                            <div class="card__string card__string--center">
+                                <strong><?= Yii::t('main', 'weight') ?></strong>
+                                <div class="card__select">
+                                    <div class="dropdown-main dropdown-main--mass js__dropdownContainer">
+                                        <label for="field-mass1" class="dropdown-main__header">
+                                            <input disabled type="text" class="field-mass1 js__productCount" id="field-mass1"
+                                                   placeholder="<?= $product['product_count'][1] ?>" data-value="1">
+                                            <i></i>
+                                        </label>
+                                        <ul class="dropdown-main__body dropdown-main__body--mass1">
+                                            <?php foreach($product['product_count'] as $key => $value): ?>
+                                                <li>
+                                                    <span data-value="<?= $key ?>" class="js__changeProductCount"><?= $value ?></span>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ul>
                                     </div>
                                 </div>
-                            <?php endif; ?>
-                            <button class="btn-purple-lg"><span><?= Yii::t('main', 'in_shopping_cart') ?></span>
+                            </div>
+                            <button class="btn-purple-lg" onclick="basket.addSingle(event, this, <?= $product['id'] ?>)"><span><?= Yii::t('main', 'in_shopping_cart') ?></span>
                             </button>
-                        </form>
+                        </div>
                         <div class="card__string card__string--items card__string">
                             <ul class="card__list">
                                 <li>
@@ -64,15 +66,10 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('main', $product['title']), 
                                 </li>
                                 <?php if ($product['product_attributes']): ?>
                                     <?php foreach ($product['product_attributes'] as $attribute): ?>
-
-                                        <?php if ($attribute['attribute_name']['slug'] != 'weight'): ?>
-                                            <li>
-                                                <strong><?= $attribute['attribute_name'][$product['lang']] ?>:</strong>
-                                                <?php foreach ($attribute['values'] as $value): ?>
-                                                    <span><?= $value[$product['lang']] ?></span>
-                                                <?php endforeach; ?>
-                                            </li>
-                                        <?php endif; ?>
+                                        <li>
+                                            <strong><?= $attribute['attribute_name'] ?>:</strong>
+                                            <span><?= $attribute['value'] ?></span>
+                                        </li>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
                             </ul>
@@ -98,6 +95,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('main', $product['title']), 
             </div>
         </div>
     </section>
+<?php if ($related_products): ?>
     <section class="items-line items-line--mini">
         <div class="container">
             <div class="items-line__content">
@@ -107,16 +105,16 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('main', $product['title']), 
                     </div>
                     <div class="items-line__top-line"></div>
                 </div>
-                <div class="items-line__items items-line__items--four">
-                    <?php if ($related_products): ?>
-                        <?php foreach ($related_products as $product): ?>
-                            <?php HtmlHelper::productInSingleProductPage($product) ?>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
+                <div class="items-line__items items-line__items--four items-line__items--lg">
+                    <?php foreach ($related_products as $product): ?>
+                        <?php HtmlHelper::product($product) ?>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
     </section>
+<?php endif; ?>
+<?php if ($last_products): ?>
     <section class="items-line items-line--mini">
         <div class="container">
             <div class="items-line__content">
@@ -126,14 +124,13 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('main', $product['title']), 
                     </div>
                     <div class="items-line__top-line"></div>
                 </div>
-                <div class="items-line__items items-line__items--four">
-                    <?php if ($last_products): ?>
-                        <?php foreach ($last_products as $product): ?>
-                            <?php HtmlHelper::productInSingleProductPage($product) ?>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
+                <div class="items-line__items items-line__items--four items-line__items--lg">
+                    <?php foreach ($last_products as $product): ?>
+                        <?php HtmlHelper::product($product) ?>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
     </section>
+<?php endif; ?>
 <?= CommentWidget::widget(['item_type' => 1, 'item_id' => $product['id']]) ?>

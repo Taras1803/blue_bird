@@ -52,6 +52,7 @@ $userTime = \common\models\CurrentTime::getUserOffsetTime();
                     <?php foreach ($langs as $key => $item): ?>
                         <div class="tab-pane <?= ($key == 0) ? 'active' : '' ?>" id="tab_<?= $key ?>">
                             <p><b>Контент: </b> <br><?= $descriptions[$key]->content ?></p>
+                            <br>
                         </div>
                         <!-- /.tab-pane -->
                     <?php endforeach; ?>
@@ -61,3 +62,15 @@ $userTime = \common\models\CurrentTime::getUserOffsetTime();
         </div>
     </div>
 </div>
+<style>
+    .about-us__img{
+        float:left;
+        width: 200px;
+        margin-left: 10px;
+    }
+
+    .about-us__img img{
+        width: 200px !important;
+        height: 200px !important;
+    }
+</style>

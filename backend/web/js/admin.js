@@ -395,6 +395,54 @@ jQuery(document).ready(function ($) {
         }
     });
 
+    $('#js__changeOrderStatus').click(function (e) {
+        e.preventDefault();
+        var order_id = $('#orderID').val();
+        var data = moduleItemData.return_data($(this).parents('tr').find('.item-data'));
+        var action = confirm('Вы уверены?')
+        if (action === true) {
+            moduleAjax.send({
+                'order_id': order_id,
+                'items': data,
+            }, {
+                "url": '/manager/orders/change-status',
+                "type": 'post',
+                "dataType": 'html',
+                "callback": 'reload',
+                "callback_params": false,
+            });
+        }
+    });
+
+    $('.js__sendOrderStatus').click(function (e) {
+        e.preventDefault();
+        var history_id = $(this).attr('data-id');
+        var email = $('#js__userEmail').val();
+        var lang = $('#js__userLang').val();
+        var action = confirm('Вы уверены?')
+        if (action === true) {
+            moduleAjax.send({
+                'history_id': history_id,
+                'email': email,
+                'lang': lang
+            }, {
+                "url": '/manager/orders/send-status-mail',
+                "type": 'post',
+                "dataType": 'html',
+                "callback": 'reload',
+                "callback_params": false,
+            });
+        }
+    });
+
+    $('.js__getOrderBy').click(function (e) {
+        e.preventDefault();
+        var data = moduleItemData.return_data($(this).parents('tr').find('.item-data'))
+        if (data) {
+            location = '/manager/orders/index?value=' + data['value'] + '&type=' + data['type'];
+        }
+    });
+
 });
 
 function getImgSrc(container) {

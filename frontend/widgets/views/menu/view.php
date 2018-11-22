@@ -36,14 +36,14 @@ else
             <ul class="items-line">
                 <?php foreach($langs as $lang): ?>
                     <li>
-                        <a href="<?= (Yii::$app->getRequest()->getLangUrl() == '/' && $lang->url == 'ru')? '/' : '/' . $lang->url . Yii::$app->getRequest()->getLangUrl() ?>"><?= $lang->name ?></a>
+                        <a href="<?= (Yii::$app->getRequest()->getLangUrl() == '/' && $lang->url == 'ru')? '/' : str_replace('/ru', '', '/' . $lang->url) . Yii::$app->getRequest()->getLangUrl() ?>" <?= ($lang->url == $language['current']->url)? 'class="active"' : '' ?>><?= $lang->name ?></a>
                     </li>
                 <?php endforeach; ?>
             </ul>
             <ul class="items-line">
                 <?php if(Yii::$app->user->isGuest): ?>
                     <li>
-                        <a href="<?= Url::to(['/login']) ?>"><?= Yii::t('main', 'login') ?></a>
+                        <a href="<?= Url::to(['/account/login']) ?>"><?= Yii::t('main', 'login') ?></a>
                     </li>
                 <?php else: ?>
                     <li>
@@ -61,7 +61,7 @@ else
             <div class="header__search">
                 <span class="bb-search"></span>
                 <form action="<?= Url::to(['/search']) ?>" class="header__search-form js__searchForm">
-                    <input type="text" id="field-search" placeholder="<?= Yii::t('main', 'search') ?>" name="q">
+                    <input type="text" id="field-search" placeholder="<?= Yii::t('main', 'search') ?>" name="q" value="<?= $_GET['q'] ?>">
                     <button class="bb-arrow-lg-right js__sendSearchForm"></button>
                 </form>
             </div>
@@ -71,11 +71,7 @@ else
         </div>
         <div class="header__inner">
             <a href="<?= $homeUrl ?>" class="header__logo">
-                <img src="<?= Yii::$app->glide->createSignedUrl([
-                    'glide/index',
-                    'path' => 'images/' . $theme_variables['header_logo'],
-                    'w' => 192
-                ], true) ?>" alt="Header Logo">
+                <img src="/uploads/logo.svg" alt="Header Logo">
             </a>
             <ul class="items-main-menu">
                 <?php foreach($categories_menu as $item): ?>
@@ -86,8 +82,8 @@ else
             </ul>
         </div>
         <div class="header__inner">
-            <a href="<?= Url::to(['/cart']) ?>" class="header__basket bb-cart">
-                <span>(<?= $product_count ?>)</span>
+            <a href="<?= Url::to(['/shopping-cart']) ?>" class="header__basket bb-cart">
+                <span class="js__basketProductsCount">(<?= $product_count ?>)</span>
             </a>
         </div>
     </div>
@@ -132,7 +128,7 @@ else
         <ul class="items-line">
             <?php foreach($langs as $lang): ?>
                 <li>
-                    <a href="<?= (Yii::$app->getRequest()->getLangUrl() == '/' && $lang->url == 'ru')? '/' : '/' . $lang->url . Yii::$app->getRequest()->getLangUrl() ?>"><?= $lang->name ?></a>
+                    <a href="<?= (Yii::$app->getRequest()->getLangUrl() == '/' && $lang->url == 'ru')? '/' : str_replace('/ru', '', '/' . $lang->url) . Yii::$app->getRequest()->getLangUrl() ?>" <?= ($lang->url == $language['current']->url)? 'class="active"' : '' ?>><?= $lang->name ?></a>
                 </li>
             <?php endforeach; ?>
         </ul>
@@ -145,4 +141,3 @@ else
         </ul>
     </div>
 </nav>
-

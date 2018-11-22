@@ -23,7 +23,7 @@ $userTime = \common\models\CurrentTime::getUserOffsetTime();
                     <?php foreach($notifications as $item): ?>
                         <tr>
                             <td><?= $item->value ?></td>
-                            <td><?= date("H:i d.m.Y", $item->date + $userTime) ?></td>
+                            <td><?= date("H:i d.m.Y", $item->created_at + $userTime) ?></td>
                         </tr>
                     <?php endforeach; ?>
                 <?php endif; ?>

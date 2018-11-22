@@ -13,7 +13,7 @@ use mihaildev\elfinder\ElFinder;
 <div class="banner-form">
     <div class="row imgContainer">
         <?php $images = explode("|", $model->image) ?>
-        <?php foreach ($images as $img): ?>
+        <?php foreach($images as $img): ?>
             <div class="col-md-4 col-lg-4 col-sm-4">
                 <!--                <a href="#" class="js__removeImg">X</a>-->
                 <div class="dropZone">
@@ -29,8 +29,7 @@ use mihaildev\elfinder\ElFinder;
                             Выбрать
                         <?php endif; ?>
                     </div>
-                    <input type="file" accept="image/png,image/jpeg" data-path="temp/" data-target="#banner-image"
-                           data-action="multi-image">
+                    <input type="file" accept="image/png,image/jpeg" data-path="temp/" data-target="#banner-image" data-action="multi-image">
                 </div>
             </div>
         <?php endforeach; ?>

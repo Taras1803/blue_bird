@@ -90,6 +90,12 @@ class ProductsController extends Controller
         }
 
         $post_data = Yii::$app->request->post();
+        if($post_data){
+            $model->action_price = $post_data['Products']['price'];
+            if($post_data['Products']['action'])
+                $model->action_price = $post_data['Products']['price'] - ($post_data['Products']['price'] / 100 * $post_data['Products']['action']);
+        }
+
         $model->created_at = time();
         $model->updated_at = time();
 
@@ -135,6 +141,13 @@ class ProductsController extends Controller
 
         $post_data = Yii::$app->request->post();
         $model->updated_at = time();
+
+
+        if($post_data){
+            $model->action_price = $post_data['Products']['price'];
+            if($post_data['Products']['action'])
+                $model->action_price = $post_data['Products']['price'] - ($post_data['Products']['price'] / 100 * $post_data['Products']['action']);
+        }
 
         if ($model->load($post_data) && $model->save()) {
             $images = explode("|", $model->images);

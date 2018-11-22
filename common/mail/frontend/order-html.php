@@ -6,7 +6,6 @@ use yii\helpers\Html;
 
 $site_name = Yii::$app->params['site_name'];
 $site_url = Yii::$app->params['siteUrl'];
-$image_url = $site_url . '/uploads/products/';
 $site_logo = $site_url . Yii::$app->params['siteLogo'];
 
 ?>
@@ -195,7 +194,7 @@ $site_logo = $site_url . Yii::$app->params['siteLogo'];
                         <span style="color:#777">
 			                <span style="color:#333">
                                 <strong><?= Yii::t('mail', 'order') ?> #:</strong>
-                            </span> <?= $data['order_id'] ?> <?= Yii::t('mail', 'placed_on') ?> <?= $data['orderDate'] ?>
+                            </span> <?= $data['order_id'] ?> <?= Yii::t('mail', 'placed_on') ?> <?= $data['order_date'] ?>
                             <br/>
 			                <span style="color:#333">
                                 <strong><?= Yii::t('mail', 'order_status') ?>:</strong>
@@ -203,7 +202,7 @@ $site_logo = $site_url . Yii::$app->params['siteLogo'];
                             <br>
                             <span style="color:#333">
                                 <strong><?= Yii::t('mail', 'delivery_method') ?>:</strong>
-                            </span> <?= $data['deliveryMethod'] ?>
+                            </span> <?= $data['delivery_method'] ?>
 		                </span>
                     </td>
                 </tr>
@@ -233,50 +232,25 @@ $site_logo = $site_url . Yii::$app->params['siteLogo'];
                                 <tr class="conf_body">
                                     <td bgcolor="#fbfbfb" align="center"
                                         style="color:#333;padding:10px!important;border:1px solid #DDD!important">
-                                        <img src="<?= $image_url . $product['image'] ?>" alt="image" style="width: 80px;">
+                                        <img src="<?= $product['image'] ?>" alt="image" style="width: 80px;">
                                     </td>
                                     <td bgcolor="#fbfbfb" align="center"
-                                        style="color:#333;padding:10px!important;border:1px solid #DDD!important; font-size: 12px"">
-                                        <a href="<?= $site_url . $product['link'] ?>" style="font-size: 16px""><?= $product['name'] ?></a>
-                                        <br>
-                                        <?php if($product['attributes']): ?>
-                                            <?php foreach($product['attributes'] as $attr): ?>
-                                                <?php if($attr['slug'] == 'color'): ?>
-                                                    <strong><?= $attr['name'] ?>: </strong> <?= $attr['value_name'] ?>
-                                                    <br>
-                                                <?php else: ?>
-                                                    <strong><?= $attr['name'] ?>: </strong><?= $attr['value'] ?>
-                                                    <br>
-                                                <?php endif; ?>
-                                            <?php endforeach; ?>
-                                        <?php endif; ?>
+                                        style="color:#333;padding:10px!important;border:1px solid #DDD!important; font-size: 12px">
+                                        <a href="<?= $site_url . $product['url'] ?>" style="font-size: 16px"><?= $product['title'] ?></a>
                                     </td>
                                     <td bgcolor="#fbfbfb" align="center"
                                         style="color:#333;padding:10px!important;border:1px solid #DDD!important">
                                         <?= $product['count'] ?>
                                     </td>
                                     <td bgcolor="#fbfbfb" align="right"
-                                        style="color:#333;padding:10px!important;border:1px solid #DDD!important">
-                                        <?= number_format($product['currency_price'] * $product['count']) ?><?= $data['currency'] ?>
+                                        style="color:#333;padding:10px!important;border:1px solid #DDD!important; text-align: center;">
+                                        <?= $product['price'] ?><?= $data['currency'] ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
 
                             <tr class="conf_body"></tr>
 
-                            <?php foreach ($data['total_info'] as $key => $item): ?>
-                                <?php if($key != 'total'): ?>
-                                    <tr class="conf_body">
-                                        <td bgcolor="#fbfbfb" align="right" colspan="3"
-                                            style="color:#333;padding:10px!important;border:1px solid #DDD!important">
-                                            <strong><?= Yii::t('mail', $key) ?></strong></td>
-                                        <td bgcolor="#fbfbfb" align="right"
-                                            style="color:#333;padding:10px!important;border:1px solid #DDD!important">
-                                            <?= number_format($item['currencyPrice']) ?><?= $data['currency'] ?>
-                                        </td>
-                                    </tr>
-                                <?php endif; ?>
-                            <?php endforeach; ?>
                             <tr class="conf_body">
                                 <td bgcolor="#fbfbfb" align="right" colspan="3" class="total"
                                     style="color:#555454;padding:10px!important;border:1px solid #DDD!important;font-size:18px;font-weight:500;font-family:Open-sans, sans-serif">
@@ -284,7 +258,7 @@ $site_logo = $site_url . Yii::$app->params['siteLogo'];
                                 </td>
                                 <td bgcolor="#fbfbfb" align="right" class="total_amount"
                                     style="color:#333;padding:10px!important;border:1px solid #DDD!important;font-size:21px;font-weight:500;font-family:Open-sans, sans-serif">
-                                    <?= number_format($data['total_info']['total']['currencyPrice']) ?><?= $data['currency'] ?>
+                                    <?= $data['total_price'] ?><?= $data['currency'] ?>
                                 </td>
                             </tr>
                             </tbody>
@@ -300,9 +274,9 @@ $site_logo = $site_url . Yii::$app->params['siteLogo'];
                             <tr>
                                 <td class="box address" width="310"
                                     style="background-color:#fbfbfb;border:1px solid #d6d4d4!important;padding:10px!important">
-                                    <p style="margin:3px 0 7px;text-transform:uppercase;font-weight:500;font-size:18px;border-bottom:1px solid #d6d4d4!important;padding-bottom:10px"><?= Yii::t('mail', 'shipping_address') ?></p>
+                                    <p style="margin:3px 0 7px;text-transform:uppercase;font-weight:500;font-size:18px;border-bottom:1px solid #d6d4d4!important;padding-bottom:10px"><?= Yii::t('mail', 'shop_information') ?></p>
                                     <span style="color:#777">
-						                <?= $data['company_address'] ?>
+						                <?= $data['mail_shop_information'] ?>
 					                </span>
                                 </td>
                                 <td width="20" class="space_address" style="border:none;padding:7px 0">&nbsp;</td>
@@ -311,46 +285,31 @@ $site_logo = $site_url . Yii::$app->params['siteLogo'];
                                         <?= Yii::t('mail', 'delivery_address') ?>
                                     </p>
                                     <span style="color:#777">
-                                    <ul>
-                                        <?php if($data['delivery_method_id'] == 1): ?>
-                                            <li>&nbsp;</li>
-                                            <li>&nbsp;</li>
-                                            <li>&nbsp;</li>
-                                            <li>&nbsp;</li>
-                                        <?php elseif ($data['delivery_method_id'] == 2): ?>
-                                            <li><?= $data['delivery_address']['first_name'] ?> <?= $data['delivery_address']['last_name'] ?></li>
-                                            <li><?= Yii::t('mail', 'department_novaposhta') ?>: <?= $data['delivery_address']['novaposhta'] ?></li>
-                                            <li><?= $data['delivery_address']['state'] ?>, <?= $data['delivery_address']['city'] ?></li>
-                                            <li><?= $data['delivery_address']['country'] ?></li>
-                                            <?php if ($data['delivery_address']['phone']): ?>
-                                                <li><?= $data['delivery_address']['phone'] ?></li>
+                                        <ul>
+                                            <li><?= Yii::t('mail', 'fio') ?>: <?= vsprintf("%s %s %s", [$data['information']['last_name'], $data['information']['first_name'], $data['information']['middle_name']]) ?></li>
+                                            <?php if($data['information']['phone']): ?>
+                                                <li><?= Yii::t('mail', 'phone') ?>: <?= $data['information']['phone'] ?></li>
                                             <?php endif; ?>
-                                        <?php elseif ($data['delivery_method_id'] == 3): ?>
-                                            <li><?= $data['delivery_address']['first_name'] ?> <?= $data['delivery_address']['last_name'] ?></li>
-                                            <li><?= $data['delivery_address']['address'] ?></li>
-                                            <li><?= $data['delivery_address']['state'] ?>, <?= $data['delivery_address']['city'] ?></li>
-                                            <li><?= $data['delivery_address']['country'] ?></li>
-                                            <?php if ($data['delivery_address']['phone']): ?>
-                                                <li><?= $data['delivery_address']['phone'] ?></li>
+                                            <?php if($data['information']['city']): ?>
+                                                <li><?= Yii::t('mail', 'city') ?>: <?= $data['information']['phone'] ?></li>
+                                            <?php else: ?>
+                                                <li></li>
                                             <?php endif; ?>
-                                        <?php else: ?>
-                                            <li><?= $data['delivery_address']['first_name'] ?> <?= $data['delivery_address']['last_name'] ?></li>
-                                            <li><?= $data['delivery_address']['address'] ?></li>
-                                            <li><?= $data['delivery_address']['state'] ?>, <?= $data['delivery_address']['city'] ?>, <?= $data['delivery_address']['post_code'] ?></li>
-                                            <li><?= $data['delivery_address']['country'] ?></li>
-                                            <?php if ($data['delivery_address']['phone']): ?>
-                                                <li><?= $data['delivery_address']['phone'] ?></li>
+                                            <?php if($data['information']['address']): ?>
+                                                <li><?= Yii::t('mail', 'address') ?>: <?= $data['information']['address'] ?></li>
                                             <?php endif; ?>
-                                        <?php endif; ?>
-                                    </ul>
-                                        </span>
+                                            <?php if($data['information']['np_detachment']): ?>
+                                                <li><?= Yii::t('mail', 'np_detachment') ?>: <?= $data['information']['np_detachment'] ?></li>
+                                            <?php endif; ?>
+                                        </ul>
+                                    </span>
                                 </td>
                             </tr>
-                            <?php if($data['delivery_address']['comment']): ?>
+                            <?php if($data['information']['comment']): ?>
                                 <tr>
                                     <td colspan="2">
                                         <br>
-                                        <strong><?= Yii::t('mail', 'comment') ?>:</strong> <?= $data['delivery_address']['comment'] ?>
+                                        <strong><?= Yii::t('mail', 'comment') ?>:</strong> <?= $data['information']['comment'] ?>
                                     </td>
                                 </tr>
                             <?php endif; ?>

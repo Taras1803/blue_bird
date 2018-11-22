@@ -92,8 +92,8 @@ $userTime = \common\models\CurrentTime::getUserOffsetTime();
                             <p><b>Столбец 1: </b> <br><?= $descriptions[$key]->description ?></p>
                             <p><b>Столбец 2: </b> <br><?= $descriptions[$key]->description_2 ?></p>
                             <p><b>Meta Заголовок: </b> <br><?= $descriptions[$key]->meta_title ?></p>
-                            <p><b>Meta описание: </b> <br><?= $descriptions[$key]->meta_description ?></p>
-                            <p><b>Meta Ключевые слова: </b> <br><?= $descriptions[$key]->meta_keywords ?></p>
+                            <p><b>Meta Описание: </b> <br><?= $descriptions[$key]->meta_description ?></p>
+                            <p><b>Ключевые слова: </b> <br><?= $descriptions[$key]->meta_keywords ?></p>
                         </div>
                         <!-- /.tab-pane -->
                     <?php endforeach; ?>

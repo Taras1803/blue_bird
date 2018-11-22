@@ -49,6 +49,7 @@ $userTime = \common\models\CurrentTime::getUserOffsetTime();
                 'attributes' => [
                     'id',
                     'price',
+                    'action',
                     [
                         'attribute' => 'slug',
                         'format' => 'raw',

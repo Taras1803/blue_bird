@@ -50,6 +50,7 @@ return [
                 '/catalog/<main:\w+>' => 'catalog/index',
                 '/catalog/<main:\w+>/<slug:\w+>' => 'catalog/category',
                 '/product/<slug:\w+>' => 'catalog/product',
+                'search' => 'catalog/search',
                 '<action>' => 'site/<action>',
                 'account/<action>' => 'account/default/<action>',
                 [

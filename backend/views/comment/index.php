@@ -1,5 +1,6 @@
 <?php
 
+use common\models\CurrentTime;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use common\models\Comment;
@@ -10,7 +11,7 @@ use common\models\Comment;
 
 $this->title = 'Комментарий';
 $this->params['breadcrumbs'][] = $this->title;
-$userTime = \common\models\CurrentTime::getUserOffsetTime();
+$userTime = CurrentTime::getUserOffsetTime();
 ?>
 
 <div class="box box-success" style="padding: 10px;">

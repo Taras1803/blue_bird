@@ -70,4 +70,14 @@ class PagesContent extends \yii\db\ActiveRecord
         else
             return '';
     }
+
+    static function getPagesContents()
+    {
+        $data = [];
+        $pc =  self::find()->all();
+        foreach ($pc as $item)
+            $data[$item->slug] = $item->getPagesContentDescription()->one()->content;
+
+        return $data;
+    }
 }

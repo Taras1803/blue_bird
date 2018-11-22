@@ -6,4 +6,5 @@ return [
     'siteLogo' => '/images/logo.svg',
     'projectName' => 'bluebird',
     'user.passwordResetTokenExpire' => 3600,
+    'author' => 'Bluebird',
 ];

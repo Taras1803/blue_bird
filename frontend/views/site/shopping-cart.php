@@ -5,7 +5,7 @@
 use frontend\widgets\Breadcrumbs;
 use yii\helpers\Url;
 
-$this->title = Yii::t('main', 'ordering') . ' / ' . Yii::$app->params['site_name'];
+$this->title = Yii::t('main', 'cart');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('main', 'cart'), 'url' => false];
 ?>
 
@@ -15,71 +15,91 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('main', 'cart'), 'url' => fa
             <div class="breadcrumbs">
                 <?= Breadcrumbs::widget(['breadcrumbs' => $this->params['breadcrumbs']]) ?>
             </div>
-            <div class="basket__header">
-                <h1 class="main-title"><?= Yii::t('main', 'cart') ?></h1>
-                <div class="basket__sum">857$</div>
-            </div>
-            <div class="basket__items">
-                <div class="basket__item">
-                    <div class="basket__inner basket__inner--photo">
-                        <a href="#" class="basket__photo">
-                            <img src="/images/prd1.jpg" alt="">
-                        </a>
-                    </div>
-                    <div class="basket__inner basket__inner--description">
-                        <div class="basket__description">
-                            <a href="#" class="basket__name">English Tea Shop Super Fruit Gift Tin</a>
-                            <ul class="basket__list">
-                                <li>
-                                    <strong><?= Yii::t('main', 'country_of_growth') ?>:</strong> <span><?= Yii::t('main', 'thailand') ?></span>
-                                </li>
-                                <li>
-                                    <strong><?= Yii::t('main', 'variety') ?>:</strong> <span>lorem ipsu</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="basket__inner basket__inner--mass">
-                        <div class="basket__title"><?= Yii::t('main', 'weight') ?></div>
-                        <div class="basket__mass">
-                            <div class="dropdown-main dropdown-main--mass">
-                                <label for="field-mass" class="dropdown-main__header">
-                                    <input disabled type="text" class="field-mass1" id="field-mass" placeholder="200 гр" name="">
-                                    <i></i>
-                                </label>
-                                <ul class="dropdown-main__body">
-                                    <li>
-                                        <span>200 <?= Yii::t('main', 'gr') ?></span>
-                                    </li>
-                                    <li>
-                                        <span>300 <?= Yii::t('main', 'gr') ?></span>
-                                    </li>
-                                    <li>
-                                        <span>400 <?= Yii::t('main', 'gr') ?></span>
-                                    </li>
-                                    <li>
-                                        <span>500 <?= Yii::t('main', 'gr') ?></span>
-                                    </li>
-                                    <li>
-                                        <span>1 <?= Yii::t('main', 'kg') ?></span>
-                                    </li>
-                                </ul>
+            <?php if (!$data): ?>
+                <div class="basket__header">
+                    <h1 class="main-title"><?= Yii::t('main', 'cart') ?></h1>
+                </div>
+                <div class="basket__items">
+                    <p><?= Yii::t('main', 'cart_empty') ?></p>
+                </div>
+            <?php else: ?>
+                <div class="basket__header">
+                    <h1 class="main-title"><?= Yii::t('main', 'cart') ?></h1>
+                    <div class="basket__sum"><?= $data['totals'] ?><?= $data['currency'] ?></div>
+                </div>
+                <div class="basket__items">
+                    <?php foreach ($data['products'] as $product_key => $product): ?>
+                        <div class="basket__item">
+                            <div class="basket__inner basket__inner--photo">
+                                <a href="<?= Url::to(['/product']) ?>/<?= $product['slug'] ?>" class="basket__photo">
+                                    <img src="<?= Yii::$app->glide->createSignedUrl([
+                                        'glide/index',
+                                        'path' => 'products/' . $product['image'],
+                                        'w' => 225
+                                    ], true) ?>" alt="<?= $product['title'] ?>">
+                                </a>
+                            </div>
+                            <div class="basket__inner basket__inner--description">
+                                <div class="basket__description">
+                                    <a href="<?= Url::to(['/product']) ?>/<?= $product['slug'] ?>"
+                                       class="basket__name"><?= $product['title'] ?></a>
+                                    <ul class="basket__list">
+                                        <?php if ($product['attributes']): ?>
+                                            <?php foreach ($product['attributes'] as $attribute): ?>
+                                                <li>
+                                                    <strong><?= Yii::t('main', $attribute['attribute_name']) ?>
+                                                        :</strong>
+                                                    <span><?= $attribute['value'] ?></span>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <li class="empy_product_attributes"></li>
+                                        <?php endif; ?>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="basket__inner basket__inner--mass">
+                                <div class="basket__title"><?= Yii::t('main', 'quantity') ?></div>
+                                <div class="basket__mass">
+                                    <div class="dropdown-main dropdown-main--mass">
+                                        <label for="field-mass" class="dropdown-main__header">
+                                            <input disabled type="text" class="field-mass1"
+                                                   placeholder="<?= $product['counts'][$product['count']] ?>"
+                                                   data-value="<?= $product['count'] ?>">
+                                            <i></i>
+                                        </label>
+                                        <ul class="dropdown-main__body">
+                                            <?php foreach ($product['counts'] as $key => $value): ?>
+                                                <li>
+                                                    <span onclick="basket.change_count(<?= $product_key ?>, <?= $key ?>)"
+                                                          data-value="<?= $key ?>"
+                                                          class="js__changeProductCount"><?= $value ?></span>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="basket__inner basket__inner--actions">
+                                <button class="basket__delete"
+                                        onclick="basket.remove(<?= $product_key ?>)"><?= Yii::t('main', 'remove_from_cart') ?></button>
+                                <div class="basket__price"><?= $product['price'] ?><?= $data['currency'] ?></div>
                             </div>
                         </div>
-                    </div>
-                    <div class="basket__inner basket__inner--actions">
-                        <button class="basket__delete"><?= Yii::t('main', 'remove_from_cart') ?></button>
-                        <div class="basket__price">25$</div>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
-            </div>
-            <div class="basket__total">
-                <strong><?= Yii::t('main', 'quantity') ?>: 2 <?= Yii::t('main', 'pc') ?></strong>
-                <strong><?= Yii::t('main', 'total_amount') ?>: 857$</strong>
-            </div>
-            <div class="basket__action">
-                <a href="<?= Url::to(['/checkout']) ?>"><button class="btn-purple-lg"><span><?= Yii::t('main', 'checkout') ?></span></button></a>
-            </div>
+                <div class="basket__total">
+                    <strong><?= Yii::t('main', 'quantity') ?>
+                        : <?= $data['products_count'] ?> <?= Yii::t('main', 'pc') ?></strong>
+                    <strong><?= Yii::t('main', 'total_amount') ?>
+                        : <?= $data['totals'] ?><?= $data['currency'] ?></strong>
+                </div>
+                <div class="basket__action">
+                    <a href="<?= Url::to(['/checkout']) ?>">
+                        <button class="btn-purple-lg"><span><?= Yii::t('main', 'checkout') ?></span></button>
+                    </a>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </section>

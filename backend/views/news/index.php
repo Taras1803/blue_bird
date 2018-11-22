@@ -40,7 +40,7 @@ $userTime = \common\models\CurrentTime::getUserOffsetTime();
                         'attribute' => 'id',
                         'format' => 'raw',
                         'value' => function ($searchModel) {
-                            return vsprintf('<a href="/banner/%s" target="_blank">%s</a>', [$searchModel->id, $searchModel->id]);
+                            return vsprintf('<a href="/news/%s" target="_blank">%s</a>', [$searchModel->id, $searchModel->id]);
                         }
                     ],
                     [

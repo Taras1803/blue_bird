@@ -79,7 +79,7 @@ use mihaildev\elfinder\ElFinder;
         </div>
     </div>
 
-    <a href="#" class="generate-slug" data-name="#ProductsDescriptions2-title" data-target="#news-slug"
+    <a href="#" class="generate-slug" data-name="#ProductsDescriptions1-title" data-target="#products-slug"
        title="Сгенерировать slug" data-error="Заполните название"
        style="float: right; top: -1px; position: relative; font-size: 20px;">
         <i class="fa fa-fw fa-plus-circle"></i>
@@ -90,6 +90,8 @@ use mihaildev\elfinder\ElFinder;
     <?= $form->field($model, 'article')->textInput() ?>
 
     <?= $form->field($model, 'price')->textInput(['type' => 'number']) ?>
+
+    <?= $form->field($model, 'action')->textInput(['type' => 'number']) ?>
 
     <?= $form->field($model, 'status')->dropDownList($model::getStatus()) ?>
 

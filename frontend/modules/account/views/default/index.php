@@ -1,107 +1,96 @@
 <?php
 
 /* @var $this yii\web\View */
+
+use frontend\widgets\Breadcrumbs;
 use \yii\helpers\Url;
 
-$this->title = Yii::t('account', 'main_info')  . ' | ' . Yii::t('account', 'my_account') . ' | ' . Yii::$app->params['site_name'];
+$this->title = Yii::t('main', 'account');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('main', 'account'), 'url' => false];
 ?>
 
-<div class="account--title"><?= Yii::t('account', 'main_info') ?> <a href="<?= Url::to(['/account/edit-info']) ?>"><?= Yii::t('account', 'edit') ?></a></div>
-
-<div class="account__details">
-
-    <div class="account__details--row">
-        <div class="account__details--title"><?= Yii::t('account', 'first_name') ?></div>
-        <div class="account__details--info"><?= $mainInfo->first_name ?></div>
+<section class="cabinet header--padding">
+    <div class="container">
+        <div class="cabinet__content">
+            <div class="breadcrumbs">
+                <?= Breadcrumbs::widget(['breadcrumbs' => $this->params['breadcrumbs']]) ?>
+            </div>
+            <div class="cabinet__header">
+                <h1 class="main-title"><?= Yii::t('main', 'account') ?></h1>
+                <div class="cabinet__buttons">
+                    <a class="cabinet__button is-active" href="<?= Url::to(['/account']) ?>/"><?= Yii::t('main', 'account') ?></a>
+                    <a class="cabinet__button"
+                       href="<?= Url::to(['/account/orders']) ?>"><?= Yii::t('main', 'orders_history') ?></a>
+                </div>
+            </div>
+            <div class="cabinet__body">
+                <div class="cabinet__tabs">
+                    <div class="cabinet__tab tab-personal-data is-active">
+                        <div class="cabinet__tab-items cabinet__tab-items--personal-data">
+                            <div class="cabinet__tab-item">
+                                <div class="cabinet__tab-label"><?= Yii::t('main', 'fio') ?></div>
+                                <div class="cabinet__tab-field"><?= $user_fio ?></div>
+                            </div>
+                            <?php if ($user->organization): ?>
+                                <div class="cabinet__tab-item">
+                                    <div class="cabinet__tab-label"><?= Yii::t('main', 'organization') ?></div>
+                                    <div class="cabinet__tab-field"><?= $user->organization ?></div>
+                                </div>
+                            <?php endif; ?>
+                            <?php if ($user->dob): ?>
+                                <div class="cabinet__tab-item">
+                                    <div class="cabinet__tab-label"><?= Yii::t('main', 'dob') ?></div>
+                                    <div class="cabinet__tab-field"><?= $user->dob ?></div>
+                                </div>
+                            <?php endif; ?>
+                            <?php if ($user->city): ?>
+                                <div class="cabinet__tab-item">
+                                    <div class="cabinet__tab-label"><?= Yii::t('main', 'city') ?></div>
+                                    <div class="cabinet__tab-field"><?= $user->city ?></div>
+                                </div>
+                            <?php endif; ?>
+                            <?php if ($user->phone): ?>
+                                <div class="cabinet__tab-item">
+                                    <div class="cabinet__tab-label"><?= Yii::t('main', 'phone') ?></div>
+                                    <div class="cabinet__tab-field"><?= $user->phone ?></div>
+                                </div>
+                            <?php endif; ?>
+                            <?php if ($user->email): ?>
+                                <div class="cabinet__tab-item">
+                                    <div class="cabinet__tab-label">E-mail</div>
+                                    <div class="cabinet__tab-field"><?= $user->email ?></div>
+                                </div>
+                            <?php endif; ?>
+                            <?php if ($user->address): ?>
+                                <div class="cabinet__tab-item">
+                                    <div class="cabinet__tab-label"><?= Yii::t('main', 'address') ?></div>
+                                    <div class="cabinet__tab-field"><?= $user->address ?></div>
+                                </div>
+                            <?php endif; ?>
+                            <?php if ($user->discount): ?>
+                                <div class="cabinet__tab-item">
+                                    <div class="cabinet__tab-label"><?= Yii::t('main', 'discount') ?></div>
+                                    <div class="cabinet__tab-field"><?= $user->discount ?></div>
+                                </div>
+                            <?php endif; ?>
+                            <?php if ($user->discount_card): ?>
+                                <div class="cabinet__tab-item">
+                                    <div class="cabinet__tab-label"><?= Yii::t('main', 'discount_card') ?></div>
+                                    <div class="cabinet__tab-field"><?= $user->discount_card ?></div>
+                                </div>
+                            <?php endif; ?>
+                            <div class="cabinet__tab-item cabinet__tab-item--password">
+                                <div class="cabinet__tab-label"><?= Yii::t('main', 'password') ?></div>
+                                <div class="cabinet__tab-field">••••••</div>
+                            </div>
+                            <div class="cabinet__tab-action">
+                                <a class="btn-purple-lg"
+                                   href="<?= Url::to(['/account/edit']) ?>"><span><?= Yii::t('main', 'edit') ?></span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <?php if($mainInfo->last_name): ?>
-        <div class="account__details--row">
-            <div class="account__details--title"><?= Yii::t('account', 'last_name') ?></div>
-            <div class="account__details--info"><?= $mainInfo->last_name ?></div>
-        </div>
-    <?php endif; ?>
-
-    <?php if($mainInfo->gender ): ?>
-        <div class="account__details--row">
-            <div class="account__details--title"><?= Yii::t('account', 'gender') ?></div>
-            <div class="account__details--info"><?= $gender[$mainInfo->gender] ?></div>
-        </div>
-    <?php endif; ?>
-
-    <div class="account__details--row">
-        <div class="account__details--title"><?= Yii::t('account', 'email_address') ?></div>
-        <div class="account__details--info"><?= $mainInfo->email ?></div>
-    </div>
-
-    <?php if($userAddress && $userAddress->phone): ?>
-        <div class="account__details--row">
-            <div class="account__details--title"><?= Yii::t('account', 'phone') ?></div>
-            <div class="account__details--info"><?= $userAddress->phone ?></div>
-        </div>
-    <?php endif; ?>
-
-    <?php if($mainInfo->date_birth): ?>
-        <div class="account__details--row">
-            <div class="account__details--title"><?= Yii::t('account', 'date_birth') ?></div>
-            <div class="account__details--info"><?= $mainInfo->date_birth ?></div>
-        </div>
-    <?php endif; ?>
-
-    <?php if($userAddress && $userAddress->country_id): ?>
-        <div class="account__details--row">
-            <div class="account__details--title"><?= Yii::t('account', 'country') ?></div>
-            <div class="account__details--info"><?= \common\models\Countries::getCountry($userAddress->country_id) ?></div>
-        </div>
-    <?php endif; ?>
-
-    <?php if($userAddress && $userAddress->state): ?>
-        <div class="account__details--row">
-            <div class="account__details--title"><?= Yii::t('account', 'country') ?></div>
-            <div class="account__details--info"><?= $userAddress->state ?></div>
-        </div>
-    <?php endif; ?>
-
-    <?php if($userAddress && $userAddress->city): ?>
-        <div class="account__details--row">
-            <div class="account__details--title"><?= Yii::t('account', 'city') ?></div>
-            <div class="account__details--info"><?= $userAddress->city ?></div>
-        </div>
-    <?php endif; ?>
-
-    <?php if($userAddress && $userAddress->address): ?>
-        <div class="account__details--row">
-            <div class="account__details--title"><?= Yii::t('account', 'address') ?></div>
-            <div class="account__details--info"><?= $userAddress->address ?></div>
-        </div>
-    <?php endif; ?>
-
-    <?php if($userAddress && $userAddress->postcode): ?>
-        <div class="account__details--row">
-            <div class="account__details--title"><?= Yii::t('account', 'postcode') ?></div>
-            <div class="account__details--info"><?= $userAddress->postcode ?></div>
-        </div>
-    <?php endif; ?>
-
-    <?php if($userAddress && $userAddress->novaposhta): ?>
-        <div class="account__details--row">
-            <div class="account__details--title"><?= Yii::t('main', 'novaposhta') ?></div>
-            <div class="account__details--info"><?= $userAddress->novaposhta ?></div>
-        </div>
-    <?php endif; ?>
-</div>
-
-<div class="account--title"><?= Yii::t('account', 'security') ?> <a href="<?= Url::to(['/account/edit-security']) ?>"><?= Yii::t('account', 'edit') ?></a></div>
-
-<div class="account__details">
-    <div class="account__details--row">
-        <div class="account__details--title"><?= Yii::t('account', 'password') ?></div>
-        <div class="account__details--info">•••••••••••</div>
-    </div>
-
-<!--    <div class="account__details--row">-->
-<!--        <div class="account__details--title">Дополнительный email</div>-->
-<!--        <div class="account__details--info">kfufi@gmail.com</div>-->
-<!--    </div>-->
-
-</div>
+</section>

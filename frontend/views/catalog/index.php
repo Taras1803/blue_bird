@@ -6,11 +6,14 @@ use frontend\components\HtmlHelper;
 use frontend\widgets\Breadcrumbs;
 use yii\helpers\Url;
 
-$this->title = Yii::t('main', 'catalog') . ' / ' . Yii::$app->params['site_name'];
+$this->title = $catalog_data['category']['title'];
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('main', $catalog_data['category']['title']), 'url' => false];
 ?>
-
+<input type="hidden"
+       value="<?= Url::to(['/catalog']) ?>/<?= $catalog_data['category']['slug'] ?>"
+       id="js__location">
+<input type="hidden" value="<?= $catalog_data['max_product_price'] ?>" id="js__max_price">
 <section class="catalog header--padding">
     <div class="container">
         <div class="catalog__content">
@@ -45,96 +48,109 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('main', $catalog_data['categ
 <section class="items-line items-line--catalog">
     <div class="container">
         <div class="items-line__content">
-            <div class="items-line__header">
-                <div class="items-line__inner">
-                    <?php if ($catalog_data['sub_categories']): ?>
-                        <div class="items-line__inline">
-                            <div class="dropdown-category">
-                                <div class="dropdown-category__wrapper">
-                                    <label for="field-category" class="dropdown-category__header">
-                                        <input disabled type="text" class="field-category" id="field-category"
-                                               placeholder="<?= Yii::t('main', 'categories') ?>" name="" disabled>
-                                        <i></i>
-                                    </label>
-                                    <ul class="dropdown-category__items">
-                                        <li class="dropdown-category__item">
-                                            <span>Зеленый чай</span>
-                                            <button>X</button>
-                                        </li>
-                                        <li class="dropdown-category__item">
-                                            <span>Черный чай</span>
-                                            <button>X</button>
-                                        </li>
-                                    </ul>
+            <?php if ($catalog_data['products']): ?>
+                <div class="items-line__header">
+                    <div class="items-line__inner">
+                        <?php if ($catalog_data['sub_categories']): ?>
+                            <div class="items-line__inline">
+                                <div class="dropdown-category">
+                                    <?php if($catalog_data['filters_cats']): ?>
+                                        <div class="count_category">
+                                            <span> <?= (count($catalog_data['filters_cats']) > 1)? vsprintf(Yii::t('main', 'selected_categories'), count($catalog_data['filters_cats'])) : $catalog_data['sub_categories'][$catalog_data['filters_cats'][0]]['title'] ?>
+                                                <i class="bb-close js__tagClose"></i></span>
+                                        </div>
+                                    <?php endif; ?>
+                                    <div class="dropdown-category__body">
+                                        <ul>
+                                            <?php foreach ($catalog_data['sub_categories'] as $key => $sub_category): ?>
+                                                <li>
+                                                    <label for="check_cats_<?= $key + 1 ?>" class="checkbox">
+                                                        <input type="checkbox"
+                                                               id="check_cats_<?= $key + 1 ?>"
+                                                               value="<?= $sub_category['id'] ?>"
+                                                               class="js__filtersCats"
+                                                            <?= ($catalog_data['filters_cats'] && in_array($sub_category['id'], $catalog_data['filters_cats'])) ? 'checked' : '' ?>>
+                                                        <span class="checkbox__mark"></span>
+                                                        <span class="checkbox__title"> <?= $sub_category['title'] ?></span>
+                                                    </label>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                        <button class="btn-purple-sm js__applyFilterCats">
+                                            <span><?= Yii::t('main', 'apply') ?></span>
+                                        </button>
+                                    </div>
                                 </div>
-                                <form class="dropdown-category__body">
-                                    <ul>
-                                        <?php foreach ($catalog_data['sub_categories'] as $key => $sub_category): ?>
-                                            <li>
-                                                <label for="check<?= $key + 1 ?>" class="checkbox">
-                                                    <input type="checkbox" id="check<?= $key + 1 ?>">
-                                                    <span class="checkbox__mark"></span>
-                                                    <span class="checkbox__title"> <?= $sub_category['title'] ?></span>
-                                                </label>
-                                            </li>
-                                        <?php endforeach; ?>
-                                    </ul>
-                                    <button class="btn-purple-sm"><span><?= Yii::t('main', 'apply') ?></span></button>
-                                </form>
+                            </div>
+                        <?php endif; ?>
+                        <div class="items-line__inline">
+                            <div class="dropdown-price">
+                                <label for="field-price" class="dropdown-price__header">
+                                    <input disabled type="text" class="field-price" id="field-price" placeholder="<?= Yii::t('main', 'price') ?>">
+                                    <i></i>
+                                </label>
+                                <div class="dropdown-price__body js__priceContainer">
+                                    <div class="dropdown-price__string">
+                                        <label for="from-input">
+                                            <span><?= Yii::t('main', 'from') ?></span>
+                                            <input type="number" name="min_price" id="from-input"
+                                                   placeholder="0<?= $catalog_data['currency'] ?>" class="field-input t"
+                                                   value="<?= $catalog_data['min_price'] ?>">
+                                        </label>
+                                        <label for="before-input">
+                                            <span><?= Yii::t('main', 'to') ?></span>
+                                            <input type="number" name="max_price" id="before-input"
+                                                   placeholder="999<?= $catalog_data['currency'] ?>"
+                                                   class="field-input t"
+                                                   value="<?= $catalog_data['max_price'] ?>">
+                                        </label>
+                                    </div>
+                                    <button class="btn-purple-sm js__applyPriceFilter">
+                                        <span>
+                                            <?= Yii::t('main', 'apply') ?>
+                                        </span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    <?php endif; ?>
-                    <div class="items-line__inline">
-                        <div class="dropdown-price">
-                            <label for="field-price" class="dropdown-price__header">
-                                <input disabled type="text" class="field-price" id="field-price" placeholder="Цена"
-                                       name="">
-                                <i></i>
-                            </label>
-                            <form class="dropdown-price__body">
-                                <div class="dropdown-price__string">
-                                    <label for="from-input">
-                                        <span><?= Yii::t('main', 'from') ?></span>
-                                        <input type="text" name="" id="from-input" placeholder="20$"
-                                               class="field-input">
-                                    </label>
-                                    <label for="before-input">
-                                        <span><?= Yii::t('main', 'to') ?></span>
-                                        <input type="text" name="" id="before-input" placeholder="80$"
-                                               class="field-input">
-                                    </label>
-                                </div>
-                                <button class="btn-purple-sm"><span><span><?= Yii::t('main', 'apply') ?></span></button>
-                            </form>
+                    </div>
+                    <div class="items-line__inner">
+                        <div class="items-line__inline">
+                            <div class="dropdown-main">
+                                <label for="js__getFilter" class="dropdown-main__header">
+                                    <input disabled type="text" class="field-sorting" id="js__getFilter"
+                                           placeholder="<?= $catalog_data['filters'][$catalog_data['order_by']] ?>"
+                                           data-key="<?= $catalog_data['order_by'] ?>">
+                                    <i></i>
+                                </label>
+                                <ul class="dropdown-main__body dropdown-main__body--sorting">
+                                    <?php foreach ($catalog_data['filters'] as $key => $filter): ?>
+                                        <li>
+                                            <span class="js__changeOrderBy" data-val="<?= $filter ?>"
+                                                  data-key="<?= $key ?>"><?= $filter ?></span>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="items-line__inner">
-                    <div class="items-line__inline">
-                        <div class="dropdown-main">
-                            <label for="field-sorting" class="dropdown-main__header">
-                                <input disabled type="text" class="field-sorting" id="field-sorting"
-                                       placeholder="Сортировка" name="">
-                                <i></i>
-                            </label>
-                            <ul class="dropdown-main__body dropdown-main__body--sorting">
-                                <?php foreach ($catalog_data['filters'] as $filter): ?>
-                                    <li>
-                                        <span data-val="По цене(от меньшей к большей)"><?= $filter ?></span>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="items-line__items items-line__items--lg items-line__items--three">
-                <?php if ($catalog_data['category']['products']): ?>
-                    <?php foreach ($catalog_data['category']['products'] as $product): ?>
+                <div class="items-line__items items-line__items--lg items-line__items--three">
+                    <?php foreach ($catalog_data['products'] as $product): ?>
                         <?php HtmlHelper::product($product) ?>
                     <?php endforeach; ?>
-                <?php endif; ?>
-            </div>
+                </div>
+            <?php else: ?>
+                <p class="js__notFound"><?= Yii::t('main', 'products_not_found') ?></p>
+            <?php endif; ?>
         </div>
+        <?= \frontend\components\ThemeLinkPager::widget([
+            'pagination' => $catalog_data['pagination'],
+            'prevPageCssClass' => 'prev',
+            'nextPageCssClass' => 'next',
+            'prevPageLabel' => '<i class="bb-arrow-sm-left"></i>',
+            'nextPageLabel' => '<i class="bb-arrow-sm-right"></i>',
+            'maxButtonCount' => 8
+        ]); ?>
     </div>
 </section>

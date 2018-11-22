@@ -1,11 +1,12 @@
 <?php
 
+use common\models\Lang;
 use \yii\helpers\Url;
 use \common\models\Currency;
 
-$this->title = Yii::t('main', 'page_not_found') . ' / ' . Yii::$app->params['site_name'];
+$this->title = Yii::t('main', 'page_not_found');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('main', 'page_not_found'), 'url' => false];
-$lang = \common\models\Lang::getCurrent();
+$lang =Lang::getCurrent();
 if ($lang->url == 'ru')
     $homeUrl = '/';
 else

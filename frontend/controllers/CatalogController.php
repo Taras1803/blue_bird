@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use common\models\Products;
+use common\models\Seo;
 use Yii;
 use yii\web\Controller;
 use frontend\components\CatalogHelper;
@@ -35,12 +36,28 @@ class CatalogController extends Controller
     public function actionIndex()
     {
         $category_slug = Yii::$app->request->get('main', false);
+        //print_r($category_slug);
+        //die();
         if (!$category_slug)
             throw new NotFoundHttpException();
+        if($category_slug == 'all'){
+            $metaData = Seo::getDataBySlug('/catalog/all');
+            Yii::$app->params['metaData'] = $metaData;
+            $catalog_data = CatalogHelper::getAllCatalogData();
+            if (!$catalog_data)
+                throw new NotFoundHttpException();
+        } else {
+            $catalog_data = CatalogHelper::getCatalogData($category_slug);
+            if (!$catalog_data)
+                throw new NotFoundHttpException();
 
-        $catalog_data = CatalogHelper::getCatalogData($category_slug);
-        if (!$catalog_data)
-            throw new NotFoundHttpException();
+            $metaData = Seo::getDataBySlug();
+            $metaData['meta_title'] = $catalog_data['category']['meta_title'];
+            $metaData['meta_description'] = $catalog_data['category']['meta_description'];
+            $metaData['meta_keywords'] = $catalog_data['category']['meta_keywords'];
+
+            Yii::$app->params['metaData'] = $metaData;
+        }
 
         return $this->render('index', [
             'catalog_data' => $catalog_data,
@@ -53,6 +70,13 @@ class CatalogController extends Controller
         if (!$catalog_data)
             throw new NotFoundHttpException();
 
+        $metaData = Seo::getDataBySlug();
+        $metaData['meta_title'] = $catalog_data['category']['meta_title'];
+        $metaData['meta_description'] = $catalog_data['category']['meta_description'];
+        $metaData['meta_keywords'] = $catalog_data['category']['meta_keywords'];
+
+        Yii::$app->params['metaData'] = $metaData;
+
         return $this->render('category', [
             'catalog_data' => $catalog_data,
         ]);
@@ -60,11 +84,47 @@ class CatalogController extends Controller
 
     public function actionProduct($slug)
     {
+        $product = CatalogHelper::getProductData($slug);
+        if (!$product)
+            throw new NotFoundHttpException();
+
+        $metaData = Seo::getDataBySlug();
+        $metaData['meta_title'] = $product['meta_title'];
+        $metaData['meta_description'] = $product['meta_description'];
+        $metaData['meta_keywords'] = $product['meta_keywords'];
+        $metaData['meta_img'] = Yii::$app->glide->createSignedUrl([
+            'glide/index',
+            'path' => 'products/' . $product['images'],
+            'w' => 570
+        ], true);
+
+        Yii::$app->params['metaData'] = $metaData;
         return $this->render('product', [
-            'product' => CatalogHelper::getProductData($slug),
+            'product' => $product,
             'last_products' => CatalogHelper::getLastViewedProducts($slug),
             'related_products' => CatalogHelper::getRelatedProducts($slug),
         ]);
+    }
+
+    public function actionSearch($q)
+    {
+
+        if (!$q || mb_strlen($q) < 2)
+            throw new NotFoundHttpException();
+
+        $metaData = Seo::getDataBySlug('/search');
+        $metaData['meta_title'] = Yii::t('main', 'search_result') . ': ' . $q;
+
+        Yii::$app->params['metaData'] = $metaData;
+
+        $catalog_data = CatalogHelper::getSearchProducts($q);
+
+        return $this->render('search', [
+            'catalog_data' => $catalog_data,
+            'q' => $q,
+        ]);
+
+
     }
 
 }

@@ -4,8 +4,9 @@
 
 use frontend\widgets\Breadcrumbs;
 use frontend\widgets\WriteToUs;
+use yii\helpers\Url;
 
-$this->title = Yii::t('main', 'about_us') . ' / ' . Yii::$app->params['site_name'];
+$this->title = Yii::t('main', 'about_us');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('main', 'about_us'), 'url' => false];
 ?>
 
@@ -38,29 +39,10 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('main', 'about_us'), 'url' =
                 </div>
             </div>
             <div class="about-us__action">
-                <a href="catalog.html" class="main-link main-link--with-arrow bb-arrow-lg-right">ПЕРЕЙТИ В КАТАЛОГ</a>
+                <a href="<?= Url::to(['/catalog/all'])  ?>" class="main-link main-link--with-arrow bb-arrow-lg-right"><?= Yii::t('main', 'go_to_catalog') ?></a>
             </div>
             <div class="about-us__images">
-                <div class="about-us__img">
-                    <a href="">
-                        <img src="/images/img-1.jpg" alt="">
-                    </a>
-                </div>
-                <div class="about-us__img">
-                    <a href="">
-                        <img src="/images/img-2.jpg" alt="">
-                    </a>
-                </div>
-                <div class="about-us__img">
-                    <a href="">
-                        <img src="/images/img-3.jpg" alt="">
-                    </a>
-                </div>
-                <div class="about-us__img">
-                    <a href="">
-                        <img src="/images/img-4.jpg" alt="">
-                    </a>
-                </div>
+                <?= $instagram_images ?>
             </div>
         </div>
     </div>
